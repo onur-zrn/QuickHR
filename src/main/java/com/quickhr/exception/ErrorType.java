@@ -65,15 +65,15 @@ public enum ErrorType {
 	DELETED_ERROR_NOT_AUTH(511, "No delete permission", HttpStatus.UNPROCESSABLE_ENTITY),
 
 
-	CHANGE_MAIL_CODE_MISMATCH(6002, "CHANGE_MAIL_CODE_MISMATCH Please check the code and try again!", HttpStatus.BAD_REQUEST),
-	CHANGE_MAIL_CODE_EXPIRED(6003, "CHANGE_MAIL_CODE_EXPIRED  Please request a new code to proceed!", HttpStatus.GONE),
+	CHANGE_MAIL_CODE_MISMATCH(6002, "Verification code mismatch. Please check the code and try again.", HttpStatus.BAD_REQUEST),
+	CHANGE_MAIL_CODE_EXPIRED(6003, "Verification code has expired. Please request a new code to proceed.", HttpStatus.GONE),
 
-	MAIL_ALREADY_TAKEN(511, "Mail adresi zaten alınmış.", HttpStatus.BAD_REQUEST),
-	MAIL_SAME(512,"Mail adresiniz aynı. Farklı mail adresi deneyin." ,HttpStatus.BAD_REQUEST ),
+	MAIL_ALREADY_TAKEN(511, "This email address is already in use.", HttpStatus.BAD_REQUEST),
+	MAIL_SAME(512, "The new email address is the same as your current one. Please use a different email address.", HttpStatus.BAD_REQUEST),
 
-	INVALID_REFRESH_TOKEN(12, "INVALID_REFRESH_TOKEN",HttpStatus.BAD_REQUEST ),
+	INVALID_REFRESH_TOKEN(513, "Invalid refresh token.", HttpStatus.BAD_REQUEST),
+	EXPIRED_REFRESH_TOKEN(514, "Refresh token has expired.", HttpStatus.BAD_REQUEST),
 
-	EXPIRED_REFRESH_TOKEN(12, "EXPIRED_REFRESH_TOKEN",HttpStatus.BAD_REQUEST ),
 
 	;
 

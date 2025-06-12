@@ -2,7 +2,6 @@ package com.quickhr.service;
 
 import com.quickhr.dto.request.*;
 import com.quickhr.dto.response.UserProfileResponseDTO;
-import com.quickhr.entity.ActivationCode;
 import com.quickhr.entity.ChangeMailCode;
 import com.quickhr.entity.User;
 import com.quickhr.enums.user.EUserRole;

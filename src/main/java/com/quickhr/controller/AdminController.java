@@ -2,9 +2,7 @@ package com.quickhr.controller;
 
 import com.quickhr.dto.request.*;
 import com.quickhr.dto.response.*;
-import com.quickhr.enums.company.ECompanyState;
 import com.quickhr.service.*;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.*;
 import org.springframework.http.ResponseEntity;
