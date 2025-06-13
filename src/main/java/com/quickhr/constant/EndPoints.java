@@ -24,7 +24,7 @@ public class EndPoints {
 	public static final String FORGOT_PASSWORD = AUTHENTICATION + "/forgot-password"; // api/auth/forgot-password
 	public static final String RESET_PASSWORD = AUTHENTICATION + "/reset-password"; // api/auth/reset-password
 	public static final String LOGOUT = AUTHENTICATION + "/logout"; // api/auth/logout
-	public static final String REFRESH_ACCESS_TOKEN  = AUTHENTICATION + "/REFRESH_ACCESS_TOKEN"; // api/auth/refresh_authentication_token
+	public static final String REFRESH_ACCESS_TOKEN  = AUTHENTICATION + "/refresh_access_token"; // api/auth/refresh_authentication_token
 
 	// Public Api
 	public static final String HOMEPAGE_CONTENT =  PUBLIC_API + "/homepage-content"; // api/public-api/homepage-content
@@ -41,7 +41,9 @@ public class EndPoints {
 	public static final String ACCEPTED_COMPANY = ADMIN + "/accepted-company"; // api/admin/accepted-company
 	public static final String CHANGE_COMPANY_STATUS = ADMIN + "/change-company-status"; // api/admin/change-company-status
 	public static final String ADMIN_DEACTIVATE = ADMIN + "/admin-deactivate"; // api/admin/deactivate
-
+	//findall bunlarda token
+	//rejectler
+	//true gelirse pendingden ACCEPTED olacak, false gelirse DENIED olacak. gelen istek cevap
 
 	// Company
 	public static final String COMPANY_DASHBOARD = COMPANY + "/dashboard"; // api/company/dashboard

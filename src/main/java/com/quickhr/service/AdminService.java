@@ -6,7 +6,6 @@ import com.quickhr.entity.*;
 import com.quickhr.enums.EAdminRole;
 import com.quickhr.enums.EState;
 import com.quickhr.enums.company.ECompanyState;
-import com.quickhr.enums.user.EUserState;
 import com.quickhr.exception.*;
 import com.quickhr.repository.*;
 import com.quickhr.utility.*;
@@ -24,6 +23,10 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
     private final CompanyService companyService;
     private final JwtManager jwtManager;
+    private final RefreshTokenService refreshTokenService;
+    public Optional<Admin> findAdminById(Long authID) {
+        return adminRepository.findById(authID);
+    }
 
     public AdminDashboardResponseDto getAdminDashboard(String token) {
         getAdminFromToken(token);
@@ -41,12 +44,12 @@ public class AdminService {
     }
 
     public AdminLoginResponseDto login(@Valid AdminLoginRequestDto dto) {
-        Optional<Admin> optionalUsername = adminRepository.findOptionalByUsername(dto.username());
-        if (optionalUsername.isEmpty()) {
+        Optional<Admin> optionalAdmin = adminRepository.findOptionalByUsername(dto.username());
+        if (optionalAdmin.isEmpty()) {
             throw new HRAppException(ErrorType.INVALID_USERNAME_OR_PASSWORD);
         }
 
-        Admin admin = optionalUsername.get();
+        Admin admin = optionalAdmin.get();
 
         if (!admin.getState().equals(EState.ACTIVE)) {
             throw new HRAppException(ErrorType.ACCOUNT_DOESNT_ACTIVE);
@@ -56,8 +59,12 @@ public class AdminService {
             throw new HRAppException(ErrorType.INVALID_USERNAME_OR_PASSWORD);
         }
 
-        String token = jwtManager.generateToken(optionalUsername.get().getId());
-        return new AdminLoginResponseDto(token, admin.getAdminRole());
+
+        String accessToken = jwtManager.generateAccessToken(admin.getId());
+
+        String refreshToken  = refreshTokenService.createRefreshToken(admin.getId()).getToken();
+
+        return new AdminLoginResponseDto(accessToken, refreshToken, admin.getAdminRole());
     }
 
     @Transactional
@@ -111,6 +118,24 @@ public class AdminService {
         }
 
         admin.setState(EState.PASSIVE);
+    }
+
+    public String refreshAccessToken(String refreshToken) {
+        RefreshToken token = refreshTokenService.findByToken(refreshToken)
+                .orElseThrow(() -> new HRAppException(ErrorType.INVALID_REFRESH_TOKEN));
+
+        if (refreshTokenService.isExpired(token)) {
+            throw new HRAppException(ErrorType.EXPIRED_REFRESH_TOKEN);
+        }
+
+        Admin admin = findAdminById(token.getAuthId())
+                .orElseThrow(() -> new HRAppException(ErrorType.USER_NOT_FOUND));
+
+        return jwtManager.generateAccessToken(admin.getId());
+    }
+
+    public void logout(String token) {
+        jwtManager.deleteRefreshToken(token);
     }
 
     public Admin getAdminFromToken(String token) {

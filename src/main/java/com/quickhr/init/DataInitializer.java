@@ -1,4 +1,4 @@
-package com.quickhr.utility.data;
+package com.quickhr.init;
 
 import com.quickhr.repository.*;
 import jakarta.annotation.PostConstruct;

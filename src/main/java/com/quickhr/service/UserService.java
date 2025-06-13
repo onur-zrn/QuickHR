@@ -13,7 +13,6 @@ import com.quickhr.repository.UserRepository;
 import com.quickhr.utility.CodeGenerator;
 import com.quickhr.utility.JwtManager;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -99,7 +98,7 @@ public class UserService {
 
 		// Yeni e-posta adresi geçerli ise, e-posta değişikliği için kod üret
 		// Kullanıcıyı güncelle
-		String generatedCode = codeGenerator.generateActivationCode();
+		String generatedCode = codeGenerator.generateCode();
 		ChangeMailCode changeMailCode = new ChangeMailCode();
 		changeMailCode.setUserId(user.getId());
 		changeMailCode.setCode(generatedCode);
@@ -118,8 +117,6 @@ public class UserService {
 
 		return true;
 	}
-
-
 
 	@Transactional
 	public void confirmEmailChange(String token, MailVerifyCodeRequestDto dto) {

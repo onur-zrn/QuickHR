@@ -86,4 +86,26 @@ public class AdminController {
                 .data(true)
                 .build());
     }
+
+    @PostMapping(LOGOUT)
+    public ResponseEntity<BaseResponse<Boolean>> logout(@RequestParam String token) {
+        adminService.logout(token);
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                .code(200)
+                .data(true)
+                .message("Çıkış yapıldı..")
+                .success(true)
+                .build());
+    }
+
+    @PostMapping(REFRESH_ACCESS_TOKEN)
+    public ResponseEntity<BaseResponse<String>> refreshAccessToken(@RequestParam String refreshToken) {
+        String newAccessToken = adminService.refreshAccessToken(refreshToken);
+        return ResponseEntity.ok(BaseResponse.<String>builder()
+                .code(200)
+                .success(true)
+                .data(newAccessToken)
+                .message("Yeni access token üretildi.")
+                .build());
+    }
 }

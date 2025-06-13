@@ -18,30 +18,29 @@ public class JwtManager {
 
 	@Value("${java17.jwt.issuer}")
 	private String issuer;
+	private final long accessTokenExpiration =  15L * 60;;//15 dk
+	private final long refreshTokenExpiration = 7 * 24 * 60 * 60; // 7 gün
 
-	private Long expTime =  15L * 60;;//15 dk
-
-
-	public String generateToken(Long userId) {
+	public String generateToken(Long authId) {
 		Algorithm algoritm = Algorithm.HMAC512(secretKey);
 		String token = JWT.create()
 				.withAudience()
 				.withIssuer(issuer)
 				.withIssuedAt(Instant.now())
-				.withExpiresAt(Instant.now().plusSeconds(expTime))
-				.withClaim("userId", userId)
-				.withClaim("role", "admin")
-				.withClaim("key", "value123")
+				.withExpiresAt(Instant.now().plusSeconds(accessTokenExpiration))
+				.withClaim("authId", authId)
+				.withClaim("role", "role")
+				.withClaim("key", "key")
 				.sign(algoritm);
 		return token;
 	}
 
-	public String generateAccessToken(Long userId) {
+	public String generateAccessToken(Long authId) {
 		return JWT.create()
 				.withIssuer(issuer)
 				.withIssuedAt(Instant.now())
-				.withExpiresAt(Instant.now().plusSeconds(expTime))
-				.withClaim("userId", userId)
+				.withExpiresAt(Instant.now().plusSeconds(accessTokenExpiration))
+				.withClaim("authId", authId)
 				.sign(Algorithm.HMAC512(secretKey));
 	}
 
@@ -53,13 +52,14 @@ public class JwtManager {
 			if (decodedJWT == null) {
 				return Optional.empty();
 			}
-			Long userId = decodedJWT.getClaim("userId").asLong();
-			return Optional.of(userId);
+			Long authId = decodedJWT.getClaim("authId").asLong();
+			return Optional.of(authId);
 		} catch (IllegalArgumentException | JWTVerificationException e) {
 			System.out.println(e.getMessage());
 			return Optional.empty();
 		}
 	}
+
 	public void deleteRefreshToken(String token) {
 		refreshTokenRepository.deleteByToken(token);
 	}

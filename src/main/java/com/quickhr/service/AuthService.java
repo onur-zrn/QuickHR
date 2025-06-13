@@ -62,7 +62,7 @@ public class AuthService {
 		user.setRole(EUserRole.MANAGER);
 		user = userRepository.save(user);
 		
-		String generatedCode = codeGenerator.generateActivationCode();
+		String generatedCode = codeGenerator.generateCode();
 		ActivationCode activationCode = new ActivationCode();
 		activationCode.setUserId(user.getId());
 		activationCode.setCode(generatedCode);
@@ -148,21 +148,19 @@ public class AuthService {
 		if(!company.get().getCompanyState().equals(ECompanyState.ACCEPTED)) {
 			throw new HRAppException(ErrorType.COMPANY_NOT_ACCEPTED);
 		}
-//		String token = jwtManager.generateToken(userOptional.get().getId());
-//		return new LoginResponseDto(token, user.getRole());
 
 		String accessToken = jwtManager.generateAccessToken(user.getId());
 
-		RefreshToken refreshTokenEntity = refreshTokenService.createRefreshToken(user.getId());
+		String refreshToken = refreshTokenService.createRefreshToken(user.getId()).getToken();
 
-		return new LoginResponseDto(accessToken, refreshTokenEntity.getToken(), user.getRole());
+		return new LoginResponseDto(accessToken, refreshToken, user.getRole());
 	}
 
 	//Şifremi unuttum talebi
 	@Transactional
 	public ForgotPasswordResponseDto forgotPassword(String mail) {
 		// Yeni bir sıfırlama kodu oluştur
-		String resetCode = codeGenerator.generateActivationCode();
+		String resetCode = codeGenerator.generateCode();
 		MailSenderRequestDto mailDto = new MailSenderRequestDto(mail, resetCode);
 		
 		// E-posta adresiyle kullanıcıyı bul. Kullanıcı bulunamazsa hata fırlat.
@@ -280,14 +278,14 @@ public class AuthService {
 	}
 
 	public String refreshAccessToken(String refreshToken) {
-		RefreshToken tokenEntity = refreshTokenService.findByToken(refreshToken)
+		RefreshToken token = refreshTokenService.findByToken(refreshToken)
 				.orElseThrow(() -> new HRAppException(ErrorType.INVALID_REFRESH_TOKEN));
 
-		if (refreshTokenService.isExpired(tokenEntity)) {
+		if (refreshTokenService.isExpired(token)) {
 			throw new HRAppException(ErrorType.EXPIRED_REFRESH_TOKEN);
 		}
 
-		User user = userService.findUserById(tokenEntity.getAuthId())
+		User user = userService.findUserById(token.getAuthId())
 				.orElseThrow(() -> new HRAppException(ErrorType.USER_NOT_FOUND));
 
 		return jwtManager.generateAccessToken(user.getId());

@@ -74,7 +74,7 @@ public class AuthController {
 		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
 				.code(200)
 				.data(true)
-				.message("Şifre sıfırlama işlemi başarılı.")
+				.message("Çıkış yapıldı.")
 				.success(true)
 				.build());
 	}

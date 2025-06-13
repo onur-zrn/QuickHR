@@ -2,7 +2,6 @@ package com.quickhr.enums.company;
 
 public enum ECompanyState {
     PENDING("Beklemede"),
-    IN_REVIEW("İncelemede"),
     ACCEPTED("Kabul Edildi"),
     DELETED("Silindi"),
     DENIED("Reddedildi");
