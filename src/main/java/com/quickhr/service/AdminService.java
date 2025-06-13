@@ -134,6 +134,61 @@ public class AdminService {
         return jwtManager.generateAccessToken(admin.getId());
     }
 
+    @Transactional
+    public List<CompanyStateResponseDto> listAllDeniedCompanies(String token) {
+        getAdminFromToken(token);
+        return companyService.findAllByCompanyState(ECompanyState.DENIED).stream()
+                .map(company -> new CompanyStateResponseDto(
+                        company.getId(),
+                        company.getName(),
+                        company.getCompanyState()
+                ))
+                .toList();
+    }
+
+    @Transactional
+    public List<CompanyStateResponseDto> listAllDeletedCompanies(String token) {
+        getAdminFromToken(token);
+        return companyService.findAllByCompanyState(ECompanyState.DELETED).stream()
+                .map(company -> new CompanyStateResponseDto(
+                        company.getId(),
+                        company.getName(),
+                        company.getCompanyState()
+                ))
+                .toList();
+    }
+
+    @Transactional
+    public List<CompanyStateResponseDto> listAllFindAllCompanies(String token) {
+        getAdminFromToken(token);
+        return companyService.findAllCompany().stream()
+                .map(company -> new CompanyStateResponseDto(
+                        company.getId(),
+                        company.getName(),
+                        company.getCompanyState()
+                ))
+                .toList();
+    }
+
+    public Boolean IsAcceptedCompany(String token, IsAcceptedCompanyRequestDto dto) {
+        getAdminFromToken(token);
+        Long companyId = dto.id();
+        Company company = companyService.getCompanyById(companyId)
+                .orElseThrow(() -> new HRAppException(ErrorType.COMPANY_NOT_FOUND));
+
+        if (!company.getCompanyState().equals(ECompanyState.PENDING)) {
+            throw new HRAppException(ErrorType.COMPANY_DOESNT_PENDING);
+        }
+
+        if (dto.isAccepted()) {
+            company.setCompanyState(ECompanyState.ACCEPTED);
+        } else {
+            company.setCompanyState(ECompanyState.DENIED);
+        }
+        companyService.save(company);
+        return dto.isAccepted();
+    }
+
     public void logout(String token) {
         jwtManager.deleteRefreshToken(token);
     }

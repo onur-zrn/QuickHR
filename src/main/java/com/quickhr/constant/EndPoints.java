@@ -41,9 +41,10 @@ public class EndPoints {
 	public static final String ACCEPTED_COMPANY = ADMIN + "/accepted-company"; // api/admin/accepted-company
 	public static final String CHANGE_COMPANY_STATUS = ADMIN + "/change-company-status"; // api/admin/change-company-status
 	public static final String ADMIN_DEACTIVATE = ADMIN + "/admin-deactivate"; // api/admin/deactivate
-	//findall bunlarda token
-	//rejectler
-	//true gelirse pendingden ACCEPTED olacak, false gelirse DENIED olacak. gelen istek cevap
+	public static final String DENIED_COMPANY = ADMIN + "/denied-company"; // api/admin/denied-company
+	public static final String DELETED_COMPANY = ADMIN + "/deleted-company"; // api/admin/deleted-company
+	public static final String FIND_ALL_COMPANY = ADMIN + "/find-all-company"; // api/admin/find-all-company
+	public static final String IS_ACCEPTED_COMPANY = ADMIN + "/is-accepted-company"; // api/admin/is-accepted-company
 
 	// Company
 	public static final String COMPANY_DASHBOARD = COMPANY + "/dashboard"; // api/company/dashboard

@@ -31,33 +31,32 @@ public class AdminController {
     }
 
     @PostMapping(ADMIN_LOGIN)
-    public ResponseEntity<BaseResponse<String>> doLogin(@RequestBody @Valid AdminLoginRequestDto dto) {
-        AdminLoginResponseDto responseDto = adminService.login(dto);
-        return ResponseEntity.ok(BaseResponse.<String>builder()
+    public ResponseEntity<BaseResponse<AdminLoginResponseDto>> doLogin(@RequestBody @Valid AdminLoginRequestDto dto) {
+        return ResponseEntity.ok(BaseResponse.<AdminLoginResponseDto>builder()
                 .code(200)
-                .data(String.valueOf(responseDto))
+                .data(adminService.login(dto))
                 .success(true)
                 .message("Admin Login Successful!")
                 .build());
     }
 
     @GetMapping(PENDING_COMPANY)
-    public ResponseEntity<BaseResponse<String>> pendingCompanies(@RequestParam String token) {
+    public ResponseEntity<BaseResponse<  List<CompanyStateResponseDto>>> pendingCompanies(@RequestParam String token) {
         List<CompanyStateResponseDto> pendingCompanies = adminService.listAllPendingCompanies(token);
-        return ResponseEntity.ok(BaseResponse.<String>builder()
+        return ResponseEntity.ok(BaseResponse.<List<CompanyStateResponseDto>>builder()
                 .code(200)
-                .data(String.valueOf(pendingCompanies))
+                .data(pendingCompanies)
                 .success(true)
                 .message("Pending Companies!")
                 .build());
     }
 
     @GetMapping(ACCEPTED_COMPANY)
-    public ResponseEntity<BaseResponse<String>> acceptedCompanies(@RequestParam String token) {
+    public ResponseEntity<BaseResponse<List<CompanyStateResponseDto>>> acceptedCompanies(@RequestParam String token) {
         List<CompanyStateResponseDto> acceptedCompanies = adminService.listAllAcceptedCompanies(token);
-        return ResponseEntity.ok(BaseResponse.<String>builder()
+        return ResponseEntity.ok(BaseResponse.<List<CompanyStateResponseDto>>builder()
                 .code(200)
-                .data(String.valueOf(acceptedCompanies))
+                .data(acceptedCompanies)
                 .success(true)
                 .message("Accepted Companies!")
                 .build());
@@ -75,6 +74,59 @@ public class AdminController {
                 .build());
     }
 
+    @GetMapping(DENIED_COMPANY)
+    public ResponseEntity<BaseResponse<List<CompanyStateResponseDto>>> deniedCompanies(@RequestParam String token) {
+        List<CompanyStateResponseDto> deniedCompanies = adminService.listAllDeniedCompanies(token);
+        return ResponseEntity.ok(BaseResponse.<List<CompanyStateResponseDto>>builder()
+                .code(200)
+                .data(deniedCompanies)
+                .success(true)
+                .message("Denied Companies!")
+                .build());
+    }
+
+    @GetMapping(DELETED_COMPANY)
+    public ResponseEntity<BaseResponse< List<CompanyStateResponseDto>>> deletedCompanies(@RequestParam String token) {
+        List<CompanyStateResponseDto> deletedCompanies = adminService.listAllDeletedCompanies(token);
+        return ResponseEntity.ok(BaseResponse.< List<CompanyStateResponseDto>>builder()
+                .code(200)
+                .data(deletedCompanies)
+                .success(true)
+                .message("Deleted Companies!")
+                .build());
+    }
+
+    @GetMapping(FIND_ALL_COMPANY)
+    public ResponseEntity<BaseResponse< List<CompanyStateResponseDto>>> findAllCompanies(@RequestParam String token) {
+        List<CompanyStateResponseDto> findAllCompanies = adminService.listAllFindAllCompanies(token);
+        return ResponseEntity.ok(BaseResponse.< List<CompanyStateResponseDto>>builder()
+                .code(200)
+                .data(findAllCompanies)
+                .success(true)
+                .message("Find All Companies!")
+                .build());
+    }
+
+
+
+    @GetMapping(IS_ACCEPTED_COMPANY)
+    public ResponseEntity<BaseResponse<Boolean>> isAcceptedCompany (@RequestParam String token,
+                                                                    IsAcceptedCompanyRequestDto dto) {
+        Boolean result = adminService.IsAcceptedCompany(token, dto);
+        String message;
+        if (result) {
+            message = "Company Accepted!";
+        } else {
+            message = "Company Denied!";
+        }
+
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                .code(200)
+                .data(result)
+                .success(true)
+                .message(message)
+                .build());
+    }
 
     @PostMapping(ADMIN_DEACTIVATE)
     public ResponseEntity<BaseResponse<Boolean>> deactivateAccount(@RequestParam String token) {

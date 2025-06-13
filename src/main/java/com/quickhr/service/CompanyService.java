@@ -19,6 +19,14 @@ public class CompanyService {
 	private final MemberShipService memberShipService;
 	private final UserService userService;
 
+	public Company save(Company company) {
+		return companyRepository.save(company);
+	}
+
+	public List<Company> findAllCompany() {
+		return companyRepository.findAll();
+	}
+
 	public Optional<Company> getCompanyByName(String name) {
 		return companyRepository.findByName(name);
 	}

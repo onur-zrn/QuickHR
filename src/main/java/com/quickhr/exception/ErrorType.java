@@ -14,6 +14,7 @@ public enum ErrorType {
 	COMPANY_ALREADY_ACCEPTED(9005, "An account with this company already exists! Please try a different company!", HttpStatus.CONFLICT),
 	COMPANY_STATE_SAME(9006, "A company with this name already exists! Please choose a different name!", HttpStatus.CONFLICT),
 	COMPANY_NOT_ACCEPTED(9007, "A!", HttpStatus.CONFLICT),
+	COMPANY_DOESNT_PENDING(9008, "The company is not in a 'PENDING' state! This action can only be performed on companies that are pending approval!", HttpStatus.BAD_REQUEST),
 
 	// USER
 	ALREADY_EXIST_USER_MAIL(8001, "An account with this email address already exists! Please try a different email!", HttpStatus.CONFLICT),
