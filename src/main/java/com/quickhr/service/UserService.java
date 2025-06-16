@@ -31,6 +31,16 @@ public class UserService {
 	private final CodeGenerator codeGenerator;
 	private final PasswordEncoder passwordEncoder;
 
+	public boolean existsByMail(String mail) {
+		return userRepository.existsByMail(mail);
+	}
+	public List<Long> getUserIdsByCompanyId(Long companyId) {
+		return userRepository.findUserIdByCompanyId(companyId);
+	}
+
+	public User save(User user) {
+		return userRepository.save(user);
+	}
 	public Optional<User> findUserById(Long userId) {
 		return userRepository.findById(userId);
 	}

@@ -15,6 +15,9 @@ public enum ErrorType {
 	COMPANY_STATE_SAME(9006, "A company with this name already exists! Please choose a different name!", HttpStatus.CONFLICT),
 	COMPANY_NOT_ACCEPTED(9007, "A!", HttpStatus.CONFLICT),
 	COMPANY_DOESNT_PENDING(9008, "The company is not in a 'PENDING' state! This action can only be performed on companies that are pending approval!", HttpStatus.BAD_REQUEST),
+	EMPLOYEE_IN_COMPANY_NOT_FOUND(9009, "No employees were found in the specified company!", HttpStatus.NOT_FOUND),
+	COMPANY_OR_EMPLOYEE_NOT_FOUND(9010, "The specified company or its employees could not be found!", HttpStatus.NOT_FOUND),
+	EMPLOYEE_NOT_FOUND(9011, "Employee not found! Please check the information you entered!", HttpStatus.NOT_FOUND),
 
 	// USER
 	ALREADY_EXIST_USER_MAIL(8001, "An account with this email address already exists! Please try a different email!", HttpStatus.CONFLICT),
@@ -64,6 +67,7 @@ public enum ErrorType {
 	PASSWORD_MISMATCH(510, "The password does not match!", HttpStatus.UNPROCESSABLE_ENTITY),
 	PASSWORD_SAME(511, "Password already same", HttpStatus.UNPROCESSABLE_ENTITY),
 	DELETED_ERROR_NOT_AUTH(511, "No delete permission", HttpStatus.UNPROCESSABLE_ENTITY),
+	UNAUTHORIZED_OPERATION(512, "Unauthorized operation! You do not have permission to perform this action!", HttpStatus.FORBIDDEN),
 
 
 	CHANGE_MAIL_CODE_MISMATCH(6002, "Verification code mismatch. Please check the code and try again.", HttpStatus.BAD_REQUEST),

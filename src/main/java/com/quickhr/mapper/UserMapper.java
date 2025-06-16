@@ -6,10 +6,10 @@ import com.quickhr.entity.*;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "string", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 	UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-	
+
 	User fromRegisterDto(RegisterRequestDto dto);
 
 	// to map UpdateProfileRequestDto to User
@@ -17,6 +17,8 @@ public interface UserMapper {
 
 	// User entity'sini UserProfileResponseDTO'ya dönüştürür
 	UserProfileResponseDTO toUserProfileResponseDTO(User user);
+	// Personel ekleme için: EmployeeRequestDto → User
+	User fromEmployeeRequestDto(EmployeeRequestDto dto);
 
 	// @AfterMapping ile null olanları set etmiyoruz, sadece gelen verileri güncelliyoruz.
 	@AfterMapping

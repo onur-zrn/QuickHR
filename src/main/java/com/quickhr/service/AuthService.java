@@ -22,6 +22,8 @@ import java.util.*;
 public class AuthService {
 	private final UserRepository userRepository;
 	private final CompanyService companyService;
+	private final EmployeeService employeeService;
+
 	private final MailSenderService mailSenderService;
 	private final JwtManager jwtManager;
 	private final CodeGenerator codeGenerator;
@@ -61,7 +63,13 @@ public class AuthService {
 		// Save User (ID is set) Manager Created
 		user.setRole(EUserRole.MANAGER);
 		user = userRepository.save(user);
-		
+
+		// SaveEmployee (ID is set) User da bir employee. Employee bilgileri
+		Employee employee = EmployeeMapper.INSTANCE.fromRegisterDto(dto);
+		employee.setUserId(user.getId());      // userId’yi sonradan set ediyoruz
+		employee.setCompanyId(company.getId());
+		employeeService.save(employee);
+
 		String generatedCode = codeGenerator.generateCode();
 		ActivationCode activationCode = new ActivationCode();
 		activationCode.setUserId(user.getId());

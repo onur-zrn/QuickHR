@@ -11,6 +11,7 @@ public class DataInitializer {
 	private final UserRepository userRepository;
 	private final AdminRepository adminRepository;
 	private final CompanyRepository companyRepository;
+	private final EmployeeRepository employeeRepository;
 
 	@PostConstruct
 	public void init() {
@@ -24,6 +25,10 @@ public class DataInitializer {
 
 		if (companyRepository.count() == 0) {
 			companyRepository.saveAll(CompanyInitializer.companyInitializer());
+		}
+
+		if (employeeRepository.count() == 0) {
+			employeeRepository.saveAll(EmployeeInitializer.employeeInitializer());
 		}
 	}
 }

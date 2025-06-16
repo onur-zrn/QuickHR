@@ -43,3 +43,5 @@ user deactivede role manager ise şirket kapanacak ise diğer o şirkette çalı
 //admin şirketi silebilir abonelik dolunca otomatik silinebilir.
 
 //companymapper kullan serviste.
+
+//request header olacak token güvenlik için

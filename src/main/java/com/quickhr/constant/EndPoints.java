@@ -58,5 +58,15 @@ public class EndPoints {
 	public static final String USER_VERIFY_EMAIL = USER + "/verify-email"; // PUT /api/users/change-email
 	public static final String USER_CHANGE_PASSWORD = USER + "/change-password"; // PUT /api/users/change-password
 	public static final String USER_DEACTIVATE = USER + "/deactivate"; // PUT /api/users/deactivate
-	
+
+
+	public static final String PERSONALS = COMPANY + "/personals"; // GET api/company/personals
+	public static final String PERSONAL_DETAILS = COMPANY + "/personal-details/{id}"; // GET api/company/personals-details/{id}
+	public static final String ADD_PERSONAL = COMPANY + "/add-personal"; // POST api/company/add-personal
+	public static final String UPDATE_PERSONAL = COMPANY + "/update-personal/{id}"; // PUT api/company/update-personal/{id}
+	public static final String DELETED_PERSONAL = COMPANY + "/deleted-personal/{id}"; // DELETE api/company/deleted-personal/{id}
+
+	public static final String ACTIVE_PERSONAL = COMPANY + "/active-personal"; // PUT api/company/personal/{id}/active
+	public static final String INACTIVE_PERSONAL = COMPANY + "/inactive-personal"; // PUT api/company/personal/{id}/inactive
+
 }

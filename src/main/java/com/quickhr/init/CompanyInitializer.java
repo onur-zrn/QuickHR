@@ -11,7 +11,7 @@ public class CompanyInitializer {
                 .mail("info@technova.com")
                 .phone("03120001122")
                 .personalCount(50)
-                .companyState(ECompanyState.PENDING)
+                .companyState(ECompanyState.ACCEPTED)
                 .build();
 
         Company company2 = Company.builder()
