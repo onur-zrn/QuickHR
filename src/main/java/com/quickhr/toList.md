@@ -2,8 +2,6 @@
 
 # üyelik tipi eklenecek
 
-# companyId belirtilecek!
-
 # üyelikler şirket maili ile olacak
 # şirket mail onayı endpointler ile de yapılabilir (mail de linke tıklayınca olacak şeyi ayrı bir endpoint ile yapılabilir)
 
