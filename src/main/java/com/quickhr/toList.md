@@ -33,7 +33,7 @@ Admin onaylarsa şirketi şirket onaylansın endpoint sonra giriş yapabilsin.
 
 Auth refresh token. Logout.  Veri tabanında refresh token sil. Veri tabnına kaydolması gerekiyor. Veri tabanında sakla o sakladığınla eşleştir tokenı
 
-Activation kodunda id gerek yok verify mailde tokendan alabilriiz.
+Activation kodunda id gerek yok verify mailde tokendan alabiliriz.
 
 user deactivede role manager ise şirket kapanacak ise diğer o şirkette çalışan userlar da deactive olsun
 
@@ -45,3 +45,5 @@ user deactivede role manager ise şirket kapanacak ise diğer o şirkette çalı
 //companymapper kullan serviste.
 
 //request header olacak token güvenlik için
+
+//getler pageable olacak
