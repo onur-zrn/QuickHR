@@ -12,7 +12,9 @@ public class DataInitializer {
 	private final AdminRepository adminRepository;
 	private final CompanyRepository companyRepository;
 	private final EmployeeRepository employeeRepository;
-	private final PermissonRepository permissonRepository;
+	private final PermissionRepository permissionRepository;
+	private final PublicHolidaysRepository publicHolidaysRepository;
+
 	@PostConstruct
 	public void init() {
 		if (userRepository.count() == 0) {
@@ -31,8 +33,14 @@ public class DataInitializer {
 			employeeRepository.saveAll(EmployeeInitializer.employeeInitializer());
 		}
 
-		if (permissonRepository.count() == 0) {
-			permissonRepository.saveAll(PermissionInitializer.permissionInitializer());
+		if (permissionRepository.count() == 0) {
+			permissionRepository.saveAll(PermissionInitializer.permissionInitializer());
 		}
+
+		if (publicHolidaysRepository.count() == 0) {
+			publicHolidaysRepository.saveAll(PublicHolidaysInitializer.publicHolidayInitializer());
+		}
+
+		System.out.println("✅ DataInitializer data has been loaded successfully!");
 	}
 }

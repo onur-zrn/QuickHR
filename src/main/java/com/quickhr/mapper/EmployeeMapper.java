@@ -4,6 +4,7 @@ import com.quickhr.dto.request.EmployeeRequestDto;
 import com.quickhr.dto.request.EmployeeUpdateProfileRequestDto;
 import com.quickhr.dto.request.EmployeeUpdateRequestDto;
 import com.quickhr.dto.request.RegisterRequestDto;
+import com.quickhr.dto.response.EmployeeDetailsResponseDto;
 import com.quickhr.dto.response.EmployeeResponseDto;
 import com.quickhr.entity.Employee;
 import com.quickhr.entity.User;
@@ -38,4 +39,6 @@ public interface EmployeeMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEmployeeFromUser(User user, @MappingTarget Employee employee);
+
+    EmployeeDetailsResponseDto toDetailsDto(Employee employee);
 }

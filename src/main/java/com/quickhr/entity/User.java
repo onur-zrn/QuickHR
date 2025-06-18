@@ -36,7 +36,8 @@ public class User extends BaseEntity {
 	private String avatar;
 	
 	private String phone;
-	
+
+
 	@Enumerated(EnumType.STRING)
 	private EUserState userState;
 	

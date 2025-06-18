@@ -24,6 +24,7 @@ public enum EPermissionPolicy {
         return description;
     }
 
+    //YILLIK İZİN GENEL DETAYLAR
     public static String getAnnualDetail(LocalDate dateOfEmployment) {
         if (dateOfEmployment == null) {
             return "İşe başlama tarihi belirtilmemiş.";
@@ -57,5 +58,24 @@ public enum EPermissionPolicy {
         sb.append("Bu nedenle yıllık izin hakkınız toplam ").append(izinGunu).append(" gündür.");
 
         return sb.toString();
+    }
+
+    //KAÇ GÜN İZİNİ VAR ONU BULMA  YILLIK İZİN AYRINTI METODUNDAN ÇAĞIR.
+    public static int getAnnualLeaveDays(LocalDate dateOfEmployment) {
+        if (dateOfEmployment == null) {
+            return 0; // işe başlama tarihi yoksa 0 izin günü veriyoruz
+        }
+
+        LocalDate now = LocalDate.now();
+        Period period = Period.between(dateOfEmployment, now);
+        int years = period.getYears();
+
+        if (years < 1) {
+            return LESS_THAN_ONE_YEAR.getDays();
+        } else if (years <= 10) {
+            return BETWEEN_ONE_AND_TEN_YEARS.getDays();
+        } else {
+            return MORE_THAN_TEN_YEARS.getDays();
+        }
     }
 }

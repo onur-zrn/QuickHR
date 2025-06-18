@@ -74,5 +74,8 @@ public class EmployeeRequestDto {
     private Double salary;
 
     @NotNull(message = "Çalışma durumu seçilmelidir.")
-    private EEmploymentStatus employmentStatus;
+    EUserState userState;
+
+//    @NotNull(message = "Çalışma durumu seçilmelidir.")
+//    private EEmploymentStatus employmentStatus;
 }

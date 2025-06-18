@@ -76,7 +76,8 @@ public class EndPoints {
 	public static final String UPDATE_PERSONAL_PROFILE = EMPLOYEE + "/update"; // PUT api/company/update
 
 	//IZINLER
-	public static final String LEAVES = EMPLOYEE + "/leaves"; //GET /api/employee/leaves , POST /api/employee/leaves
+	public static final String LEAVES = EMPLOYEE + "/leaves"; //GET /api/employee/leaves  //TÜM İZİNLER
+	public static final String CREATE_LEAVE = EMPLOYEE + "/leaves"; // POST /api/employee/leaves
 	public static final String LEAVES_DETAIL = EMPLOYEE + "/leaves/{id}"; //GET /api/employee/leaves/{id}
 	public static final String LEAVES_BALANCE = EMPLOYEE + "/leaves/balance"; //GET /api/employee/leaves/balance
 

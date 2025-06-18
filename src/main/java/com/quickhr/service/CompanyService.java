@@ -2,6 +2,7 @@ package com.quickhr.service;
 
 import com.quickhr.dto.request.EmployeeRequestDto;
 import com.quickhr.dto.response.CompanyDashboardResponseDto;
+import com.quickhr.dto.response.EmployeeDetailsResponseDto;
 import com.quickhr.dto.response.EmployeeResponseDto;
 import com.quickhr.dto.response.PersonalStateResponseDto;
 import com.quickhr.entity.*;
@@ -108,7 +109,7 @@ public class CompanyService {
 	}
 
 	@Transactional
-	public EmployeeResponseDto getEmployeeDetailsById(String token, Long id) {
+	public EmployeeDetailsResponseDto getEmployeeDetailsById(String token, Long id) {
 		User user = userService.getUserFromToken(token);
 
 		if(!user.getRole().equals(EUserRole.MANAGER)) {
@@ -129,7 +130,8 @@ public class CompanyService {
 		if (employeeInCompany.isEmpty()) {
 			throw new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND);
 		}
-		return EmployeeMapper.INSTANCE.toDto(employeeInCompany.get());
+		return EmployeeMapper.INSTANCE.toDetailsDto(employeeInCompany.get());
+
 	}
 
 	@Transactional
@@ -167,7 +169,7 @@ public class CompanyService {
 		if (employees.getUserState() == (EUserState.ACTIVE)) {
 			throw new HRAppException(ErrorType.EMPLOYEE_ALREADY_EXIST_ACTIVE);
 		}
-		// Employee pending modda mı değil mi kontrol edilir
+		// Employee pending modda mı değil mi kontrol edilir.BURAYA BAK.
 		if(employees.getUserState() != (EUserState.PENDING)) {
 			throw new HRAppException(ErrorType.EMPLOYEE_DOESNT_PENDING);
 		}
@@ -294,7 +296,7 @@ public class CompanyService {
 	private Employee validateManagerAndEmployeeAccess(String token, Long id) {
 		User users = validateManagerForUserAccess(token);
 		// Employee için kayıtlı personel kontrolü
-		Employee employees = employeeService.getEmployeeById(id)
+		Employee employees = employeeService.getEmployeeByUserId(users.getId())
 				.orElseThrow(() -> new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND));
 		// Manager için employee üzerindeki yetki kontrülü
 		if (!users.getCompanyId().equals(employees.getCompanyId())) {

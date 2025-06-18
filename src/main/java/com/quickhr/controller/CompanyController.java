@@ -63,17 +63,14 @@ public class CompanyController {
     }
 
     @GetMapping(PERSONAL_DETAILS)
-    public ResponseEntity<BaseResponse<EmployeeResponseDto>> getEmployeeDetailsById(
-            @RequestParam String token,
-            @PathVariable Long id) {
-        EmployeeResponseDto employeeDetails = companyService.getEmployeeDetailsById(token, id);
-        return ResponseEntity.ok(BaseResponse.<EmployeeResponseDto>builder()
+    public ResponseEntity<BaseResponse<EmployeeDetailsResponseDto>> getEmployeeDetailsById(@RequestParam String token, @PathVariable Long id) {
+        EmployeeDetailsResponseDto employeeDetails = companyService.getEmployeeDetailsById(token, id);
+        return ResponseEntity.ok(BaseResponse.<EmployeeDetailsResponseDto>builder()
                 .code(200)
                 .data(employeeDetails)
                 .success(true)
                 .message("Employee details retrieved!")
                 .build());
-
     }
 
     /**

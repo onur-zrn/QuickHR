@@ -57,6 +57,7 @@ public class EmployeeInitializer {
             String phone = employeeCounter <= 10 ? "0500111" + String.format("%04d", companyId) : "0500" + String.format("%07d", employeeCounter * 222);
             String identityNumber = "ID" + String.format("%09d", employeeCounter);
             String address = employeeCounter <= 10 ? "Company Address " + companyId : "Address " + employeeCounter;
+            EUserState userState = EUserState.values()[random.nextInt(EUserState.values().length)];
 
             employees.add(Employee.builder()
                     .userId((long) employeeCounter)
@@ -76,7 +77,8 @@ public class EmployeeInitializer {
                     .dateOfEmployment(dateOfEmployment)
                     .dateOfTermination(null)
                     .salary(salary)
-                    .employmentStatus(employmentStatus)
+                    //.employmentStatus(employmentStatus)
+                    .userState(userState)
                     .build());
 
             employeeCounter++;
