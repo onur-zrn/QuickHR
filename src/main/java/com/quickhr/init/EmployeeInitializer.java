@@ -37,11 +37,20 @@ public class EmployeeInitializer {
             EEmploymentStatus employmentStatus = EEmploymentStatus.values()[random.nextInt(EEmploymentStatus.values().length)];
 
             String position = employeeCounter <= 10 ? "Manager" : "Employee";
-            LocalDate dateOfEmployment = LocalDate.now().minusYears(random.nextInt(10)).minusMonths(random.nextInt(12));
+
+            // Azalan sırada işe başlama tarihleri: 30 yıldan 0'a doğru, döngüsel
+            int yearsAgo = 30 - ((employeeCounter - 1) % 31);
+            int monthsAgo = (employeeCounter - 1) % 12;
+            LocalDate dateOfEmployment = LocalDate.now()
+                    .minusYears(yearsAgo)
+                    .minusMonths(monthsAgo);
+
             Double salary = employeeCounter <= 10 ? (10000.0 + companyId * 1000) : (4000.0 + employeeCounter * 100);
+
             LocalDate dateOfBirth = employeeCounter <= 10
                     ? LocalDate.of(1980 + (int) companyId % 10, 1, 1)
                     : LocalDate.of(1985 + (employeeCounter % 15), 1, 1);
+
             String firstName = employeeCounter <= 10 ? "ManagerFirstName" + companyId : "FirstName" + employeeCounter;
             String lastName = employeeCounter <= 10 ? "ManagerLastName" + companyId : "LastName" + employeeCounter;
             String mail = employeeCounter <= 10 ? "manager" + companyId + "@" + domain : "user" + employeeCounter + "@" + domain;

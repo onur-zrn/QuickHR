@@ -1,12 +1,12 @@
 package com.quickhr.enums.permissions;
 
 public enum EPermissionState {
-    PENDING("Bekliyor (onay bekleyen durum)"),
+    PENDING("Bekliyor"),
     APPROVED("Onaylandı"),
-    REJECTED("Reddedildi"),
-    CANCELLED("İptal edildi"),
-    IN_PROGRESS("İzinde"),
-    COMPLETED("İzin bitti)");
+    REJECTED("Reddedildi");
+//    CANCELLED("İptal edildi"),
+//    IN_PROGRESS("İzinde"),
+//    COMPLETED("İzin bitti)");
 
     private final String description;
 

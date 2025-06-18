@@ -18,6 +18,14 @@ public enum ErrorType {
 	EMPLOYEE_IN_COMPANY_NOT_FOUND(9009, "No employees were found in the specified company!", HttpStatus.NOT_FOUND),
 	COMPANY_OR_EMPLOYEE_NOT_FOUND(9010, "The specified company or its employees could not be found!", HttpStatus.NOT_FOUND),
 	EMPLOYEE_NOT_FOUND(9011, "Employee not found! Please check the information you entered!", HttpStatus.NOT_FOUND),
+	EMPLOYEE_ALREADY_EXIST_ACTIVE(9012, "Kullanıcı zaten 'ACTIVE' durumdadır!", HttpStatus.CONFLICT),
+	EMPLOYEE_ALREADY_EXIST_INACTIVE(9013, "Kullanıcı zaten 'INACTIVE' durumdadır!", HttpStatus.CONFLICT),
+	USER_STATE_DOESNT_ACTIVE(9014, "Token sahibi kullanıcı aktif durumda değildir!", HttpStatus.BAD_REQUEST),
+	USER_COMPANY_STATE_DOESNT_ACCEPTED(9015, "Kullanıcının bağlı olduğu şirket aktif durumda değildir!", HttpStatus.BAD_REQUEST),
+	USER_NOT_MANAGER(9016, "Erişim yetkiniz yok! Bu işlemi yalnızca yöneticiler gerçekleştirebilir!", HttpStatus.UNPROCESSABLE_ENTITY),
+	USER_STATE_SAME(9017, "Kullanıcının mevcut durumu ile aynı değer girildi! Durumu değiştirmek istiyorsanız farklı bir değer girin!", HttpStatus.CONFLICT),
+	EMPLOYEE_DOESNT_PENDING(9018, "Kullanıcının durumu 'PENDING' değildir!", HttpStatus.BAD_REQUEST),
+	EMPLOYEE_ALREADY_EXIST_DELETED(9019, "Kullanıcı zaten 'DELETED' durumdadır!", HttpStatus.CONFLICT),
 
 	// USER
 	ALREADY_EXIST_USER_MAIL(8001, "An account with this email address already exists! Please try a different email!", HttpStatus.CONFLICT),
@@ -79,6 +87,8 @@ public enum ErrorType {
 	INVALID_REFRESH_TOKEN(513, "Invalid refresh token.", HttpStatus.BAD_REQUEST),
 	EXPIRED_REFRESH_TOKEN(514, "Refresh token has expired.", HttpStatus.BAD_REQUEST),
 
+	//PERMISSSIONS
+	PERMISSION_NOT_FOUND(4001, "PERMISSSION not found!", HttpStatus.NOT_FOUND),
 
 	;
 

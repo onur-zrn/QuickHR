@@ -3,6 +3,7 @@ package com.quickhr.controller;
 import com.quickhr.dto.request.EmployeeRequestDto;
 import com.quickhr.dto.request.EmployeeUpdateRequestDto;
 import com.quickhr.dto.response.*;
+import com.quickhr.enums.user.EUserState;
 import com.quickhr.service.*;
 import jakarta.validation.Valid;
 import lombok.*;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+
+import java.util.List;
 
 import static com.quickhr.constant.EndPoints.*;
 
@@ -110,6 +113,91 @@ public class CompanyController {
                 .success(true)
                 .message("Employee personal details updated successfully.")
                 .data(updatedEmployee)
+                .build());
+    }
+
+    @PutMapping(MAKE_PERSONAL_STATUS_IN_ACTIVE)
+    public ResponseEntity<BaseResponse<Boolean>> makeActivePersonal(@RequestParam String token, @RequestParam Long id) {
+        Boolean result = companyService.makeActivePersonal(token, id);
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                .code(200)
+                .data(result)
+                .success(true)
+                .message("Active personal data retrieved!")
+                .build());
+    }
+
+    @PutMapping(MAKE_PERSONAL_STATUS_IN_PASSIVE)
+    public ResponseEntity<BaseResponse<Boolean>> makePassivePersonal(@RequestParam String token, @RequestParam Long id) {
+        Boolean result = companyService.makePassivePersonal(token, id);
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                .code(200)
+                .data(result)
+                .success(true)
+                .message("Passive personal data retrieved!")
+                .build());
+    }
+
+    @PutMapping(CHANGE_PERSONAL_STATUS)
+    public ResponseEntity<BaseResponse<Boolean>> changePersonalStatus(
+            @RequestParam String token, @RequestParam Long id, @RequestParam EUserState newUserState) {
+        Boolean result = companyService.changePersonalStatus(token, id, newUserState);
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                .code(200)
+                .data(result)
+                .success(true)
+                .message("Personal status updated!")
+                .build());
+    }
+
+    @GetMapping(ACTIVE_PERSONAL)
+    public ResponseEntity<BaseResponse<List<PersonalStateResponseDto>>> getActivePersonal(@RequestParam String token) {
+        return ResponseEntity.ok(BaseResponse.<List<PersonalStateResponseDto>>builder()
+                .code(200)
+                .data(companyService.getActivePersonal(token))
+                .success(true)
+                .message("Active personals retrieved!")
+                .build());
+    }
+
+    @GetMapping(PASSIVE_PERSONAL)
+    public ResponseEntity<BaseResponse<List<PersonalStateResponseDto>>> getPassivePersonal(@RequestParam String token) {
+        return ResponseEntity.ok(BaseResponse.<List<PersonalStateResponseDto>>builder()
+                .code(200)
+                .data(companyService.getPassivePersonal(token))
+                .success(true)
+                .message("Passive personals retrieved!")
+                .build());
+    }
+
+    @GetMapping(PENDING_PERSONAL)
+    public ResponseEntity<BaseResponse<List<PersonalStateResponseDto>>> getPendingPersonal(@RequestParam String token) {
+        return ResponseEntity.ok(BaseResponse.<List<PersonalStateResponseDto>>builder()
+                .code(200)
+                .data(companyService.getPendingPersonal(token))
+                .success(true)
+                .message("Pending personals retrieved!")
+                .build());
+    }
+
+    @GetMapping(DELETED_PERSONAL)
+    public ResponseEntity<BaseResponse<List<PersonalStateResponseDto>>> getDeletedPersonal(@RequestParam String token) {
+        return ResponseEntity.ok(BaseResponse.<List<PersonalStateResponseDto>>builder()
+                .code(200)
+                .data(companyService.getDeletedPersonal(token))
+                .success(true)
+                .message("Deleted personals retrieved!")
+                .build());
+    }
+
+    @DeleteMapping(MAKE_DELETED_PERSONAL)
+    public ResponseEntity<BaseResponse<Boolean>> makeDeletedPersonal(@RequestParam String token, @RequestParam Long id) {
+        Boolean result = companyService.makeDeletedPersonal(token, id);
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                .code(200)
+                .data(result)
+                .success(true)
+                .message("Personal soft delete successfully!")
                 .build());
     }
 

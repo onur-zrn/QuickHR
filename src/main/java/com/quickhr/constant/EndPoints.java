@@ -64,15 +64,21 @@ public class EndPoints {
 	public static final String PERSONAL_DETAILS = COMPANY + "/personal-details/{id}"; // GET api/company/personals-details/{id}
 	public static final String ADD_PERSONAL = COMPANY + "/add-personal"; // POST api/company/add-personal
 	public static final String UPDATE_PERSONAL = COMPANY + "/update-personal/{id}"; // PUT api/company/update-personal/{id}
-	public static final String DELETED_PERSONAL = COMPANY + "/deleted-personal/{id}"; // DELETE api/company/deleted-personal/{id}
-
-	public static final String ACTIVE_PERSONAL = COMPANY + "/active-personal"; // PUT api/company/personal/{id}/active
-	public static final String INACTIVE_PERSONAL = COMPANY + "/inactive-personal"; // PUT api/company/personal/{id}/inactive
+	public static final String DELETED_PERSONAL = COMPANY + "/deleted-personal"; // GET /api/company/deleted-personal
+	public static final String ACTIVE_PERSONAL = COMPANY + "/active-personal"; // GET /api/company/active-personal
+	public static final String PASSIVE_PERSONAL = COMPANY + "/inactive-personal"; // GET /api/company/inactive-personal
+	public static final String PENDING_PERSONAL = COMPANY + "/pending-personal"; // GET /api/company/pending-personal
+	public static final String MAKE_DELETED_PERSONAL = COMPANY + "/employee/{id}/deleted"; // DELETE /api/company/employee/{id}/deleted
+	public static final String MAKE_PERSONAL_STATUS_IN_ACTIVE = COMPANY + "/employee/{id}/active"; // PUT /api/company/employee/{id}/active
+	public static final String MAKE_PERSONAL_STATUS_IN_PASSIVE = COMPANY + "/employee/{id}/passive"; // PUT /api/company/employee/{id}/passive
+	public static final String CHANGE_PERSONAL_STATUS = COMPANY + "/employee/{id}/change-personal-status"; // PUT /api/company/employee/{id}/change-personal-status
 
 	public static final String UPDATE_PERSONAL_PROFILE = EMPLOYEE + "/update"; // PUT api/company/update
+
+	//IZINLER
 	public static final String LEAVES = EMPLOYEE + "/leaves"; //GET /api/employee/leaves , POST /api/employee/leaves
-	public static final String LEAVES_DETAIL = EMPLOYEE + "/leaves"; //GET /api/employee/leaves/{id}
-	public static final String LEAVES_BALANCE = EMPLOYEE + "/leaves/{id}"; //GET /api/employee/leaves/{id}
+	public static final String LEAVES_DETAIL = EMPLOYEE + "/leaves/{id}"; //GET /api/employee/leaves/{id}
+	public static final String LEAVES_BALANCE = EMPLOYEE + "/leaves/balance"; //GET /api/employee/leaves/balance
 
 	public static final String ANNUAL_LEAVE_DETAILS = EMPLOYEE + "/annual-leave/details"; // GET /api/employee/annual-leave/details  - Yıllık izin kullanım detayları
 

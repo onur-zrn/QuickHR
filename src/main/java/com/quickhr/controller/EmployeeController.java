@@ -3,6 +3,7 @@ package com.quickhr.controller;
 import com.quickhr.dto.request.EmployeeUpdateProfileRequestDto;
 import com.quickhr.dto.request.EmployeeUpdateRequestDto;
 import com.quickhr.dto.response.*;
+import com.quickhr.entity.Permission;
 import com.quickhr.service.*;
 import jakarta.validation.Valid;
 import lombok.*;
@@ -18,7 +19,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping(EMPLOYEE_DASHBOARD)
-    public ResponseEntity<BaseResponse<EmployeeDashboardResponseDto>> getEmployeeDashboard(@RequestParam String token) {
+    public ResponseEntity<BaseResponse<EmployeeDashboardResponseDto>> getEmployeeDashboard(@RequestHeader String token) {
         EmployeeDashboardResponseDto dashboard = employeeService.getEmployeeDashboard(token);
         return ResponseEntity.ok(BaseResponse.<EmployeeDashboardResponseDto>builder()
                 .code(200)
@@ -42,11 +43,21 @@ public class EmployeeController {
                 .build());
     }
 
-    @GetMapping(ANNUAL_LEAVE_DETAILS)
-    public ResponseEntity<BaseResponse<String>> getEmployeeDashboard(@RequestParam String token) {
-        return ResponseEntity.ok(BaseResponse.<EmployeeDashboardResponseDto>builder()
+    @GetMapping(LEAVES_BALANCE)
+    public ResponseEntity<BaseResponse<String>> getLeavesBalance(@RequestHeader String token) {
+        return ResponseEntity.ok(BaseResponse.<String>builder()
                 .code(200)
-                .data(employeeService.getAnnualLeavesDetail(token))
+                .data(employeeService.getLeavesBalance(token))
+                .success(true)
+                .message("Employee dashboard data retrieved!")
+                .build());
+    }
+
+    @GetMapping(LEAVES_DETAIL)
+    public ResponseEntity<BaseResponse<Permission>> getLeavesDetail(@RequestHeader String token, @PathVariable Long id) {
+        return ResponseEntity.ok(BaseResponse.<Permission>builder()
+                .code(200)
+                .data(employeeService.getLeavesDetail(token,id))
                 .success(true)
                 .message("Employee dashboard data retrieved!")
                 .build());

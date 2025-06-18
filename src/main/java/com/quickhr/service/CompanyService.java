@@ -3,6 +3,7 @@ package com.quickhr.service;
 import com.quickhr.dto.request.EmployeeRequestDto;
 import com.quickhr.dto.response.CompanyDashboardResponseDto;
 import com.quickhr.dto.response.EmployeeResponseDto;
+import com.quickhr.dto.response.PersonalStateResponseDto;
 import com.quickhr.entity.*;
 import com.quickhr.enums.user.EUserRole;
 import com.quickhr.enums.user.EUserState;
@@ -159,5 +160,166 @@ public class CompanyService {
 		return EmployeeMapper.INSTANCE.toDto(employee);
 	}
 
+	@Transactional
+	public Boolean makeActivePersonal(String token, Long id) {
+		Employee employees = validateManagerAndEmployeeAccess(token, id);
+		// Employee için aktiflik mevcut mu değil mi kontrolü
+		if (employees.getUserState() == (EUserState.ACTIVE)) {
+			throw new HRAppException(ErrorType.EMPLOYEE_ALREADY_EXIST_ACTIVE);
+		}
+		// Employee pending modda mı değil mi kontrol edilir
+		if(employees.getUserState() != (EUserState.PENDING)) {
+			throw new HRAppException(ErrorType.EMPLOYEE_DOESNT_PENDING);
+		}
+		// Tüm şartları sağlıyorsa employee durumu aktif yapıyoruz
+		employees.setUserState(EUserState.ACTIVE);
+		return true;
+	}
+
+	@Transactional
+	public Boolean makePassivePersonal(String token, Long id) {
+		Employee employees = validateManagerAndEmployeeAccess(token, id);
+		// Employee için pasiflik mevcut mu değil mi kontrolü
+		if (employees.getUserState() == (EUserState.INACTIVE)) {
+			throw new HRAppException(ErrorType.EMPLOYEE_ALREADY_EXIST_INACTIVE);
+		}
+		// Employee pending modda mı değil mi kontrol edilir
+		if(employees.getUserState() != (EUserState.PENDING)) {
+			throw new HRAppException(ErrorType.EMPLOYEE_DOESNT_PENDING);
+		}
+		// Tüm şartları sağlıyorsa employee durumu pasif yapıyoruz
+		employees.setUserState(EUserState.INACTIVE);
+		return true;
+	}
+
+	@Transactional
+	public Boolean changePersonalStatus(String token, Long id, EUserState newUserState) {
+		Employee employees = validateManagerAndEmployeeAccess(token, id);
+		// Employee için durum değişikliği kontrolü - aynı değer girilmemeli
+		if(employees.getUserState() == newUserState) {
+			throw new HRAppException(ErrorType.USER_STATE_SAME);
+		}
+		employees.setUserState(newUserState);
+		return true;
+	}
+
+	@Transactional
+	public List<PersonalStateResponseDto> getActivePersonal(String token) {
+		User usersValid = validateManagerForUserAccess(token);
+		Long companyId = usersValid.getCompanyId();
+
+		List<Employee> activeUsersByCompany = employeeService.getActiveUsersByCompany(companyId, EUserState.ACTIVE);
+		if(activeUsersByCompany.isEmpty()) {
+			throw new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND);
+		}
+
+		return activeUsersByCompany.stream()
+				.map(user -> new PersonalStateResponseDto(
+						user.getId(),
+						user.getFirstName(),
+						user.getLastName(),
+						user.getUserState()
+				)).toList();
+	}
+
+	@Transactional
+	public List<PersonalStateResponseDto> getPassivePersonal(String token) {
+		User usersValid = validateManagerForUserAccess(token);
+		Long companyId = usersValid.getCompanyId();
+
+		List<Employee> passiveUsersByCompany = employeeService.getPassiveUsersByCompany(companyId, EUserState.INACTIVE);
+		if(passiveUsersByCompany.isEmpty()) {
+			throw new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND);
+		}
+
+		return passiveUsersByCompany.stream()
+				.map(user -> new PersonalStateResponseDto(
+						user.getId(),
+						user.getFirstName(),
+						user.getLastName(),
+						user.getUserState()
+				)).toList();
+	}
+
+	@Transactional
+	public List<PersonalStateResponseDto> getPendingPersonal(String token) {
+		User usersValid = validateManagerForUserAccess(token);
+		Long companyId = usersValid.getCompanyId();
+
+		List<Employee> pendingUsersByCompany = employeeService.getPendingUsersByCompany(companyId, EUserState.PENDING);
+		if(pendingUsersByCompany.isEmpty()) {
+			throw new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND);
+		}
+
+		return pendingUsersByCompany.stream()
+				.map(user -> new PersonalStateResponseDto(
+						user.getId(),
+						user.getFirstName(),
+						user.getLastName(),
+						user.getUserState()
+				)).toList();
+	}
+
+	@Transactional
+	public List<PersonalStateResponseDto> getDeletedPersonal(String token) {
+		User usersValid = validateManagerForUserAccess(token);
+		Long companyId = usersValid.getCompanyId();
+
+		List<Employee> deletedUsersByCompany = employeeService.getDeletedUsersByCompany(companyId, EUserState.DELETED);
+		if(deletedUsersByCompany.isEmpty()) {
+			throw new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND);
+		}
+
+		return deletedUsersByCompany.stream()
+				.map(user -> new PersonalStateResponseDto(
+						user.getId(),
+						user.getFirstName(),
+						user.getLastName(),
+						user.getUserState()
+				)).toList();
+	}
+
+	@Transactional
+	public Boolean makeDeletedPersonal(String token, Long id) {
+		Employee employees = validateManagerAndEmployeeAccess(token, id);
+		// Employee silinmiş mi kontrol edilir
+		if (employees.getUserState() == EUserState.DELETED) {
+			throw new HRAppException(ErrorType.EMPLOYEE_ALREADY_EXIST_DELETED);
+		}
+		// Tüm şartları sağlıyorsa employee durumu pasif yapıyoruz
+		employees.setUserState(EUserState.DELETED);
+		return true;
+	}
+
+	private Employee validateManagerAndEmployeeAccess(String token, Long id) {
+		User users = validateManagerForUserAccess(token);
+		// Employee için kayıtlı personel kontrolü
+		Employee employees = employeeService.getEmployeeById(id)
+				.orElseThrow(() -> new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND));
+		// Manager için employee üzerindeki yetki kontrülü
+		if (!users.getCompanyId().equals(employees.getCompanyId())) {
+			throw new HRAppException(ErrorType.UNAUTHORIZED_OPERATION);
+		}
+		return employees;
+	}
+
+	private User validateManagerForUserAccess(String token) {
+		User users = userService.getUserFromToken(token);
+		// Company için aktiflik kontrolü
+		//if (!users.getCompanyId().equals(ECompanyState.ACCEPTED)) {
+		//	throw new HRAppException(ErrorType.USER_COMPANY_STATE_DOESNT_ACCEPTED);
+		//}
+
+
+		// Token'a sahip user için aktiflik kontrolü
+		if (users.getUserState() != EUserState.ACTIVE) {
+			throw new HRAppException(ErrorType.USER_STATE_DOESNT_ACTIVE);
+		}
+		// User manager mı değil mi kontrolü
+		if (users.getRole() != EUserRole.MANAGER) {
+			throw new HRAppException(ErrorType.USER_NOT_MANAGER);
+		}
+		return users;
+	}
 
 }

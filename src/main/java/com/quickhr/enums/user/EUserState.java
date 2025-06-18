@@ -5,7 +5,8 @@ public enum EUserState {
     ACTIVE("Aktif"),
     INACTIVE("Pasif"),
     BANNED("Erişim Engellendi"),
-    DENIED("Reddedildi");
+    DENIED("Reddedildi"),
+    DELETED("Silindi");
     //deleted olanlar gözükmesin
     private final String description;
     

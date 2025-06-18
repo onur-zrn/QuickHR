@@ -12,7 +12,7 @@ public class DataInitializer {
 	private final AdminRepository adminRepository;
 	private final CompanyRepository companyRepository;
 	private final EmployeeRepository employeeRepository;
-
+	private final PermissonRepository permissonRepository;
 	@PostConstruct
 	public void init() {
 		if (userRepository.count() == 0) {
@@ -29,6 +29,10 @@ public class DataInitializer {
 
 		if (employeeRepository.count() == 0) {
 			employeeRepository.saveAll(EmployeeInitializer.employeeInitializer());
+		}
+
+		if (permissonRepository.count() == 0) {
+			permissonRepository.saveAll(PermissionInitializer.permissionInitializer());
 		}
 	}
 }

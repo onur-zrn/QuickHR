@@ -4,8 +4,11 @@ import com.quickhr.dto.request.EmployeeUpdateProfileRequestDto;
 import com.quickhr.dto.request.EmployeeUpdateRequestDto;
 import com.quickhr.dto.response.*;
 import com.quickhr.entity.Employee;
+import com.quickhr.entity.Permission;
 import com.quickhr.entity.User;
+import com.quickhr.enums.permissions.EPermissionPolicy;
 import com.quickhr.enums.user.EUserRole;
+import com.quickhr.enums.user.EUserState;
 import com.quickhr.exception.ErrorType;
 import com.quickhr.exception.HRAppException;
 import com.quickhr.mapper.EmployeeMapper;
@@ -22,13 +25,16 @@ import org.springframework.data.domain.Pageable;
 @RequiredArgsConstructor
 public class EmployeeService {
     private final UserService userService;
+    private final PermissionService permissionService;
+
     private final EmployeeRepository employeeRepository;
 
     public Employee save(Employee employee) {
         return employeeRepository.save(employee);
     }
-    public Optional<Employee> findByUserId(Long userId) {
-        return employeeRepository.findByUserId(userId);
+
+    public Optional<Employee> getEmployeeById(Long id) {
+        return employeeRepository.findById(id);
     }
 
     public EmployeeDashboardResponseDto getEmployeeDashboard(String token) {
@@ -50,6 +56,7 @@ public class EmployeeService {
                 )
         );
     }
+
     public Page<EmployeeResponseDto> getEmployeeInCompany(List<Long> userIds, Pageable pageable) {
         Page<Employee> employees = employeeRepository.findByUserIdIn(userIds, pageable);
         return employees.map(EmployeeMapper.INSTANCE::toDto);
@@ -117,9 +124,53 @@ public class EmployeeService {
         return EmployeeMapper.INSTANCE.toDto(updated);
     }
 
-    public EmployeeDashboardResponseDto getAnnualLeavesDetail(String token) {
-        User employee_user = userService.getUserFromToken(token);
+    public List<Employee> getActiveUsersByCompany(Long companyId, EUserState userState) {
+        return employeeRepository.findAllByCompanyIdAndUserState(companyId, userState);
     }
+
+    public List<Employee> getPassiveUsersByCompany(Long companyId, EUserState userState) {
+        return employeeRepository.findAllByCompanyIdAndUserState(companyId, userState);
+    }
+
+    public List<Employee> getPendingUsersByCompany(Long companyId, EUserState userState) {
+        return employeeRepository.findAllByCompanyIdAndUserState(companyId, userState);
+    }
+
+    public List<Employee> getDeletedUsersByCompany(Long companyId, EUserState userState) {
+        return employeeRepository.findAllByCompanyIdAndUserState(companyId, userState);
+    }
+
+    @Transactional
+    public String getLeavesBalance(String token) {
+        User employee_user = userService.getUserFromToken(token);
+
+        Employee employee = employeeRepository.findById(employee_user.getId())
+                .orElseThrow(() -> new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND));
+        return EPermissionPolicy.getAnnualDetail(employee.getDateOfEmployment());
+    }
+
+    @Transactional
+    public Permission getLeavesDetail(String token, Long permissionId) {
+        // Token'dan kullanıcıyı bul
+        User employeeUser = userService.getUserFromToken(token);
+
+        // Kullanıcının Employee kaydını al
+        Employee employee = employeeRepository.findById(employeeUser.getId())
+                .orElseThrow(() -> new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND));
+
+        // Permission'ı service aracılığıyla getir
+        Permission permission = permissionService.getPermissionById(permissionId)
+                .orElseThrow(() -> new HRAppException(ErrorType.PERMISSION_NOT_FOUND));
+
+        // Permission bu çalışana mı ait kontrolü
+        if (!permission.getUserId().equals(employee.getId())) {
+            throw new HRAppException(ErrorType.UNAUTHORIZED_OPERATION);
+        }
+
+        return permission;
+    }
+
+
 }
 
 
