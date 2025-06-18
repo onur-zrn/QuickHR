@@ -1,6 +1,9 @@
 package com.quickhr.dto.request;
 
 import jakarta.validation.constraints.*;
+
+import java.time.LocalDate;
+
 import static com.quickhr.constant.RegexConstants.*;
 
 public record RegisterRequestDto(
@@ -31,8 +34,10 @@ public record RegisterRequestDto(
 		String phone,
 		
 		@NotBlank(message = "Company name cannot empty!")
-		String companyName
-		
+		String companyName,
+
+		@NotNull(message = "Date of employment cannot be null!")
+		LocalDate dateOfEmployment
 ) {
 
 }

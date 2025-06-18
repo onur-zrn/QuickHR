@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @RequiredArgsConstructor
@@ -86,8 +88,9 @@ public class CompanyService {
 	}
 
 	@Transactional
-	public List<EmployeeResponseDto> getEmployeeInCompany(String token) {
+	public Page<EmployeeResponseDto> getEmployeeInCompany(String token, Pageable pageable) {
 		User user = userService.getUserFromToken(token);
+
 		if (!user.getRole().equals(EUserRole.MANAGER)) {
 			throw new HRAppException(ErrorType.UNAUTHORIZED_OPERATION);
 		}
@@ -96,12 +99,13 @@ public class CompanyService {
 			throw new HRAppException(ErrorType.COMPANY_OR_EMPLOYEE_NOT_FOUND);
 		}
 
-		// 1. Şirketteki userId listesi
+		// Şirketteki tüm userId'leri al
 		List<Long> userIds = userService.getUserIdsByCompanyId(user.getCompanyId());
 
-		return employeeService.getEmployeeInCompany(userIds);
-
+		// EmployeeService içinde pagination ile verileri döndür
+		return employeeService.getEmployeeInCompany(userIds, pageable);
 	}
+
 	@Transactional
 	public EmployeeResponseDto getEmployeeDetailsById(String token, Long id) {
 		User user = userService.getUserFromToken(token);
@@ -120,11 +124,11 @@ public class CompanyService {
 			throw new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND);
 		}
 
-		Employee employeeInCompany = employeeService.getEmployeeInCompany(id);
-		if (employeeInCompany == null) {
+		Optional<Employee> employeeInCompany = employeeService.getEmployeeInCompany(id);
+		if (employeeInCompany.isEmpty()) {
 			throw new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND);
 		}
-		return EmployeeMapper.INSTANCE.toDto(employeeInCompany);
+		return EmployeeMapper.INSTANCE.toDto(employeeInCompany.get());
 	}
 
 	@Transactional

@@ -25,7 +25,8 @@ public class UserInitializer {
 				9L, "codenation.dev",
 				10L, "pixelpeak.com"
 		);
-		//user1 manager1@technova.com  Aaa12345!
+		//manager1 manager1@technova.com  Aaa12345!
+		// user1  user11@technova.com  Aaa12345!
 
 		int userCounter = 1;
 
@@ -45,8 +46,6 @@ public class UserInitializer {
 					.build());
 			userCounter++;
 		}
-
-		Random random = new Random();
 
 		// 40 tane daha kullanıcı oluştur (rastgele ama mantıklı şekilde)
 		while (userCounter <= 50) {

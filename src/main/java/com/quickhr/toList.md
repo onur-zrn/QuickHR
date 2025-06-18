@@ -23,7 +23,6 @@
 
 ##### PublicHolidayInitializer class ramazan ve kurban bayramlarını yıl bağlı service güncellemesi yapılacak
 
-# GITHUB'A ATILACAK 13.06.2025'DEN ÖNCE
 
 Dashbordlarda token ile giriş yapsınn token olmazsa dashbord gözükmesin
 
@@ -44,4 +43,10 @@ user deactivede role manager ise şirket kapanacak ise diğer o şirkette çalı
 
 //request header olacak token güvenlik için
 
-//getler pageable olacak
+//get all  pageable olacak
+
+//user servis ve employee servis birbirini çağırıyor lazy dene
+
+//deleted olan user ları listeleme
+
+//logouta bak

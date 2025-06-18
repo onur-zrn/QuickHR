@@ -3,12 +3,15 @@ package com.quickhr.service;
 import com.quickhr.dto.request.*;
 import com.quickhr.dto.response.UserProfileResponseDTO;
 import com.quickhr.entity.ChangeMailCode;
+import com.quickhr.entity.Employee;
 import com.quickhr.entity.User;
 import com.quickhr.enums.user.EUserRole;
 import com.quickhr.enums.user.EUserState;
 import com.quickhr.exception.ErrorType;
 import com.quickhr.exception.HRAppException;
+import com.quickhr.mapper.EmployeeMapper;
 import com.quickhr.mapper.UserMapper;
+import com.quickhr.repository.EmployeeRepository;
 import com.quickhr.repository.UserRepository;
 import com.quickhr.utility.CodeGenerator;
 import com.quickhr.utility.JwtManager;
@@ -26,10 +29,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 	private final UserRepository userRepository;
+	private final EmployeeRepository employeeRepository;
+
 	private final MailSenderService mailSenderService;
 	private final JwtManager jwtManager;
 	private final CodeGenerator codeGenerator;
 	private final PasswordEncoder passwordEncoder;
+
 
 	public boolean existsByMail(String mail) {
 		return userRepository.existsByMail(mail);
@@ -77,6 +83,15 @@ public class UserService {
 
 		// Save the updated user
 		userRepository.save(user);
+
+		// User ile ilişkili Employee'yi bul (örneğin userId ile)
+		Optional<Employee> employeeOpt = employeeRepository.findByUserId(user.getId());
+		if (employeeOpt.isPresent()) {
+			Employee employee = employeeOpt.get();
+			// User'daki ortak alanları Employee'ye kopyala
+			EmployeeMapper.INSTANCE.updateEmployeeFromUser(user, employee);
+			employeeRepository.save(employee);
+		}
 
 		// Return the response DTO
 		return UserMapper.INSTANCE.toUserProfileResponseDTO(user);

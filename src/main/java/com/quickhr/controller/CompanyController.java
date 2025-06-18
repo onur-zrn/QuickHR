@@ -1,6 +1,7 @@
 package com.quickhr.controller;
 
 import com.quickhr.dto.request.EmployeeRequestDto;
+import com.quickhr.dto.request.EmployeeUpdateRequestDto;
 import com.quickhr.dto.response.*;
 import com.quickhr.service.*;
 import jakarta.validation.Valid;
@@ -8,8 +9,10 @@ import lombok.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 
 import static com.quickhr.constant.EndPoints.*;
 
@@ -19,6 +22,7 @@ import static com.quickhr.constant.EndPoints.*;
 @CrossOrigin(origins = "*")
 public class CompanyController {
     private final CompanyService companyService;
+    private final EmployeeService employeeService;
 
     @GetMapping(COMPANY_DASHBOARD)
     public ResponseEntity<BaseResponse<CompanyDashboardResponseDto>> getCompanyDashboard(@RequestParam String token) {
@@ -32,25 +36,29 @@ public class CompanyController {
     }
 
     @GetMapping(PERSONALS)
-    public ResponseEntity<BaseResponse<List<EmployeeResponseDto>>> getEmployeeInCompany(@RequestParam String token) {
-        List<EmployeeResponseDto> personals = companyService.getEmployeeInCompany(token);
+    public ResponseEntity<BaseResponse<Page<EmployeeResponseDto>>> getEmployeeInCompany(
+            @RequestParam String token,
+            @PageableDefault(page = 0, size = 10, direction = Sort.Direction.ASC) Pageable pageable) {
+
+        Page<EmployeeResponseDto> personals = companyService.getEmployeeInCompany(token, pageable);
 
         if (personals == null || personals.isEmpty()) {
-            return ResponseEntity.ok(BaseResponse.<List<EmployeeResponseDto>>builder()
+            return ResponseEntity.ok(BaseResponse.<Page<EmployeeResponseDto>>builder()
                     .code(204)
-                    .data(Collections.emptyList())
+                    .data(Page.empty())
                     .success(true)
                     .message("No personals found for the company.")
                     .build());
         }
 
-        return ResponseEntity.ok(BaseResponse.<List<EmployeeResponseDto>>builder()
+        return ResponseEntity.ok(BaseResponse.<Page<EmployeeResponseDto>>builder()
                 .code(200)
                 .data(personals)
                 .success(true)
                 .message("Company personals retrieved successfully!")
                 .build());
     }
+
     @GetMapping(PERSONAL_DETAILS)
     public ResponseEntity<BaseResponse<EmployeeResponseDto>> getEmployeeDetailsById(
             @RequestParam String token,
@@ -87,6 +95,21 @@ public class CompanyController {
                 .success(true)
                 .message("Personel başarıyla eklendi.")
                 .data(responseDto)
+                .build());
+    }
+    @PutMapping(UPDATE_PERSONAL)
+    public ResponseEntity<BaseResponse<EmployeeResponseDto>> updateEmployeePersonalDetails(
+            @RequestHeader String token,
+            @PathVariable Long id,
+            @RequestBody @Valid EmployeeUpdateRequestDto dto) {
+
+        EmployeeResponseDto updatedEmployee = employeeService.updatePersonalDetails(token, id, dto);
+
+        return ResponseEntity.ok(BaseResponse.<EmployeeResponseDto>builder()
+                .code(200)
+                .success(true)
+                .message("Employee personal details updated successfully.")
+                .data(updatedEmployee)
                 .build());
     }
 

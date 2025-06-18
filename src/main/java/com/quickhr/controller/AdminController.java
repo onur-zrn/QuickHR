@@ -109,7 +109,7 @@ public class AdminController {
 
 
 
-    @GetMapping(IS_ACCEPTED_COMPANY)
+    @PutMapping(IS_ACCEPTED_COMPANY)
     public ResponseEntity<BaseResponse<Boolean>> isAcceptedCompany (@RequestParam String token,
                                                                     IsAcceptedCompanyRequestDto dto) {
         Boolean result = adminService.IsAcceptedCompany(token, dto);

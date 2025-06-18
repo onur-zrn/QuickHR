@@ -18,7 +18,7 @@ public class JwtManager {
 
 	@Value("${java17.jwt.issuer}")
 	private String issuer;
-	private final long accessTokenExpiration =  15L * 60;;//15 dk
+	private final long accessTokenExpiration =  15L * 60 * 10;;//15 dk * 10 deneme sonra sil
 	private final long refreshTokenExpiration = 7 * 24 * 60 * 60; // 7 gün
 
 	public String generateToken(Long authId) {

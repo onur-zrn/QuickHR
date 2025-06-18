@@ -66,6 +66,4 @@ public class Employee extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private EEmploymentStatus employmentStatus;
 
-    @Enumerated(EnumType.STRING)
-    private EPermissionType permissionType;
 }

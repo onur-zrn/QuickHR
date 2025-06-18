@@ -68,6 +68,7 @@ public class AuthService {
 		Employee employee = EmployeeMapper.INSTANCE.fromRegisterDto(dto);
 		employee.setUserId(user.getId());      // userId’yi sonradan set ediyoruz
 		employee.setCompanyId(company.getId());
+		employee.setDateOfEmployment(dto.dateOfEmployment());
 		employeeService.save(employee);
 
 		String generatedCode = codeGenerator.generateCode();

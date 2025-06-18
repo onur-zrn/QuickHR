@@ -1,15 +1,22 @@
 package com.quickhr.service;
 
+import com.quickhr.dto.request.EmployeeUpdateProfileRequestDto;
+import com.quickhr.dto.request.EmployeeUpdateRequestDto;
 import com.quickhr.dto.response.*;
 import com.quickhr.entity.Employee;
 import com.quickhr.entity.User;
+import com.quickhr.enums.user.EUserRole;
 import com.quickhr.exception.ErrorType;
 import com.quickhr.exception.HRAppException;
 import com.quickhr.mapper.EmployeeMapper;
+import com.quickhr.mapper.UserMapper;
 import com.quickhr.repository.EmployeeRepository;
+import jakarta.transaction.Transactional;
 import lombok.*;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +27,9 @@ public class EmployeeService {
     public Employee save(Employee employee) {
         return employeeRepository.save(employee);
     }
-
+    public Optional<Employee> findByUserId(Long userId) {
+        return employeeRepository.findByUserId(userId);
+    }
 
     public EmployeeDashboardResponseDto getEmployeeDashboard(String token) {
         userService.getUserFromToken(token);
@@ -41,22 +50,76 @@ public class EmployeeService {
                 )
         );
     }
-    public List<EmployeeResponseDto> getEmployeeInCompany(List<Long> userIdList) {
-        if (userIdList == null || userIdList.isEmpty()) {
-            throw new HRAppException(ErrorType.USER_NOT_FOUND);
-        }
-        System.out.println(userIdList);
-        List<Employee> employees = employeeRepository.findByUserIdIn(userIdList);
-
-        System.out.println(employees);
-        // DTO listesine dönüştür
-        return EmployeeMapper.INSTANCE.toDtoList(employees);
+    public Page<EmployeeResponseDto> getEmployeeInCompany(List<Long> userIds, Pageable pageable) {
+        Page<Employee> employees = employeeRepository.findByUserIdIn(userIds, pageable);
+        return employees.map(EmployeeMapper.INSTANCE::toDto);
     }
 
-    public Employee getEmployeeInCompany(Long userId) {
+    public Optional<Employee> getEmployeeInCompany(Long userId) {
         if (userId == null) {
             throw new HRAppException(ErrorType.USER_NOT_FOUND);
         }
         return employeeRepository.findByUserId(userId);
     }
+
+    @Transactional
+    public EmployeeResponseDto updatePersonalDetails(String token, Long id, EmployeeUpdateRequestDto dto) {
+        User manager = userService.getUserFromToken(token);
+
+        if(!manager.getRole().equals(EUserRole.MANAGER)){
+            throw new HRAppException(ErrorType.UNAUTHORIZED_OPERATION);
+        }
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND));
+
+        if(!manager.getCompanyId().equals(employee.getCompanyId())) {
+            throw new HRAppException(ErrorType.UNAUTHORIZED_OPERATION);
+        }
+
+        EmployeeMapper.INSTANCE.updateEmployeeFromDto(dto, employee);
+
+        Employee updated = employeeRepository.save(employee);
+
+        // Employee ile ilişkili User'ı bul
+        Optional<User> userOpt = userService.findUserById(employee.getUserId());
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            // Employee'deki ortak alanları User'a kopyala
+            UserMapper.INSTANCE.updateUserFromEmployee(employee, user);
+            userService.save(user);
+        }
+
+        return EmployeeMapper.INSTANCE.toDto(updated);
+    }
+
+    @Transactional
+    public EmployeeResponseDto updateProfile(String token, EmployeeUpdateProfileRequestDto dto) {
+        User employee_user = userService.getUserFromToken(token);
+
+
+        Employee employee = employeeRepository.findById(employee_user.getId())
+                .orElseThrow(() -> new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND));
+
+
+        EmployeeMapper.INSTANCE.updateEmployeeFromUpdateProfileDto(dto, employee);
+
+        Employee updated = employeeRepository.save(employee);
+
+        // Employee ile ilişkili User'ı bul
+        Optional<User> userOpt = userService.findUserById(employee.getUserId());
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            // Employee'deki ortak alanları User'a kopyala
+            UserMapper.INSTANCE.updateUserFromEmployee(employee, user);
+            userService.save(user);
+        }
+
+        return EmployeeMapper.INSTANCE.toDto(updated);
+    }
+
+    public EmployeeDashboardResponseDto getAnnualLeavesDetail(String token) {
+        User employee_user = userService.getUserFromToken(token);
+    }
 }
+
+

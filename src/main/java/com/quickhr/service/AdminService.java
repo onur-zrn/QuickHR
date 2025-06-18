@@ -7,6 +7,7 @@ import com.quickhr.enums.EAdminRole;
 import com.quickhr.enums.EState;
 import com.quickhr.enums.company.ECompanyState;
 import com.quickhr.exception.*;
+import com.quickhr.mapper.CompanyMapper;
 import com.quickhr.repository.*;
 import com.quickhr.utility.*;
 import jakarta.transaction.Transactional;
@@ -24,6 +25,8 @@ public class AdminService {
     private final CompanyService companyService;
     private final JwtManager jwtManager;
     private final RefreshTokenService refreshTokenService;
+    private final CompanyMapper companyMapper;
+
     public Optional<Admin> findAdminById(Long authID) {
         return adminRepository.findById(authID);
     }
@@ -32,9 +35,9 @@ public class AdminService {
         getAdminFromToken(token);
         return new AdminDashboardResponseDto(
                 "Admin Dashboard",
-                150,    // Total companies
-                4500,               // Total employees
-                85,                 // Active sessions
+                150,
+                4500,
+                85,
                 List.of(
                         "New company registration: TechCorp",
                         "User john doe updated profile",
@@ -44,25 +47,19 @@ public class AdminService {
     }
 
     public AdminLoginResponseDto login(@Valid AdminLoginRequestDto dto) {
-        Optional<Admin> optionalAdmin = adminRepository.findOptionalByUsername(dto.username());
-        if (optionalAdmin.isEmpty()) {
-            throw new HRAppException(ErrorType.INVALID_USERNAME_OR_PASSWORD);
-        }
-
-        Admin admin = optionalAdmin.get();
+        Admin admin = adminRepository.findOptionalByUsername(dto.username())
+                .orElseThrow(() -> new HRAppException(ErrorType.INVALID_USERNAME_OR_PASSWORD));
 
         if (!admin.getState().equals(EState.ACTIVE)) {
             throw new HRAppException(ErrorType.ACCOUNT_DOESNT_ACTIVE);
         }
 
-        if(!passwordEncoder.matches(dto.password(), admin.getPassword())){
+        if (!passwordEncoder.matches(dto.password(), admin.getPassword())) {
             throw new HRAppException(ErrorType.INVALID_USERNAME_OR_PASSWORD);
         }
 
-
         String accessToken = jwtManager.generateAccessToken(admin.getId());
-
-        String refreshToken  = refreshTokenService.createRefreshToken(admin.getId()).getToken();
+        String refreshToken = refreshTokenService.createRefreshToken(admin.getId()).getToken();
 
         return new AdminLoginResponseDto(accessToken, refreshToken, admin.getAdminRole());
     }
@@ -70,49 +67,37 @@ public class AdminService {
     @Transactional
     public List<CompanyStateResponseDto> listAllPendingCompanies(String token) {
         getAdminFromToken(token);
-        return companyService.findAllByCompanyState(ECompanyState.PENDING).stream()
-                .map(company -> new CompanyStateResponseDto(
-                        company.getId(),
-                        company.getName(),
-                        company.getCompanyState()
-                ))
-                .toList();
+        return companyMapper.toStateDtoList(companyService.findAllByCompanyState(ECompanyState.PENDING));
     }
 
     @Transactional
     public List<CompanyStateResponseDto> listAllAcceptedCompanies(String token) {
         getAdminFromToken(token);
-        return companyService.findAllByCompanyState(ECompanyState.ACCEPTED).stream()
-                .map(company -> new CompanyStateResponseDto(
-                        company.getId(),
-                        company.getName(),
-                        company.getCompanyState()
-                ))
-                .toList();
+        return companyMapper.toStateDtoList(companyService.findAllByCompanyState(ECompanyState.ACCEPTED));
     }
 
     @Transactional
     public Boolean changeCompanyStatus(String token, ChangeCompanyStatusRequestDto dto) {
         getAdminFromToken(token);
-        Long companyId = dto.companyId();
-        ECompanyState newCompanyState = dto.newStatus();
 
-        Company company = companyService.getCompanyById(companyId)
+        Company company = companyService.getCompanyById(dto.companyId())
                 .orElseThrow(() -> new HRAppException(ErrorType.COMPANY_NOT_FOUND));
 
-        if (company.getCompanyState() == newCompanyState) {
+        if (company.getCompanyState() == dto.newStatus()) {
             throw new HRAppException(ErrorType.COMPANY_STATE_SAME);
         }
 
-        company.setCompanyState(newCompanyState);
+        company.setCompanyState(dto.newStatus());
         return true;
     }
 
     public void deActivateAccount(String token) {
         Admin admin = getAdminFromToken(token);
-        if(admin.getAdminRole().equals(EAdminRole.SUPER_ADMIN)){
+
+        if (admin.getAdminRole().equals(EAdminRole.SUPER_ADMIN)) {
             throw new HRAppException(ErrorType.SUPER_ADMIN_NOT_DELETED);
         }
+
         if (admin.getState().equals(EState.PASSIVE)) {
             throw new HRAppException(ErrorType.ACCOUNT_ALREADY_PASSIVE);
         }
@@ -137,54 +122,32 @@ public class AdminService {
     @Transactional
     public List<CompanyStateResponseDto> listAllDeniedCompanies(String token) {
         getAdminFromToken(token);
-        return companyService.findAllByCompanyState(ECompanyState.DENIED).stream()
-                .map(company -> new CompanyStateResponseDto(
-                        company.getId(),
-                        company.getName(),
-                        company.getCompanyState()
-                ))
-                .toList();
+        return companyMapper.toStateDtoList(companyService.findAllByCompanyState(ECompanyState.DENIED));
     }
 
     @Transactional
     public List<CompanyStateResponseDto> listAllDeletedCompanies(String token) {
         getAdminFromToken(token);
-        return companyService.findAllByCompanyState(ECompanyState.DELETED).stream()
-                .map(company -> new CompanyStateResponseDto(
-                        company.getId(),
-                        company.getName(),
-                        company.getCompanyState()
-                ))
-                .toList();
+        return companyMapper.toStateDtoList(companyService.findAllByCompanyState(ECompanyState.DELETED));
     }
 
     @Transactional
     public List<CompanyStateResponseDto> listAllFindAllCompanies(String token) {
         getAdminFromToken(token);
-        return companyService.findAllCompany().stream()
-                .map(company -> new CompanyStateResponseDto(
-                        company.getId(),
-                        company.getName(),
-                        company.getCompanyState()
-                ))
-                .toList();
+        return companyMapper.toStateDtoList(companyService.findAllCompany());
     }
 
     public Boolean IsAcceptedCompany(String token, IsAcceptedCompanyRequestDto dto) {
         getAdminFromToken(token);
-        Long companyId = dto.id();
-        Company company = companyService.getCompanyById(companyId)
+
+        Company company = companyService.getCompanyById(dto.id())
                 .orElseThrow(() -> new HRAppException(ErrorType.COMPANY_NOT_FOUND));
 
         if (!company.getCompanyState().equals(ECompanyState.PENDING)) {
             throw new HRAppException(ErrorType.COMPANY_DOESNT_PENDING);
         }
 
-        if (dto.isAccepted()) {
-            company.setCompanyState(ECompanyState.ACCEPTED);
-        } else {
-            company.setCompanyState(ECompanyState.DENIED);
-        }
+        company.setCompanyState(dto.isAccepted() ? ECompanyState.ACCEPTED : ECompanyState.DENIED);
         companyService.save(company);
         return dto.isAccepted();
     }
@@ -194,11 +157,10 @@ public class AdminService {
     }
 
     public Admin getAdminFromToken(String token) {
-        Optional<Long> adminId = jwtManager.validateToken(token);
-        if (adminId.isEmpty()) {
-            throw new HRAppException(ErrorType.INVALID_TOKEN);
-        }
-        return adminRepository.findById(adminId.get())
+        Long adminId = jwtManager.validateToken(token)
+                .orElseThrow(() -> new HRAppException(ErrorType.INVALID_TOKEN));
+
+        return adminRepository.findById(adminId)
                 .orElseThrow(() -> new HRAppException(ErrorType.ADMIN_NOT_FOUND));
     }
 }

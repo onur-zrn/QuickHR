@@ -69,4 +69,12 @@ public class EndPoints {
 	public static final String ACTIVE_PERSONAL = COMPANY + "/active-personal"; // PUT api/company/personal/{id}/active
 	public static final String INACTIVE_PERSONAL = COMPANY + "/inactive-personal"; // PUT api/company/personal/{id}/inactive
 
+	public static final String UPDATE_PERSONAL_PROFILE = EMPLOYEE + "/update"; // PUT api/company/update
+	public static final String LEAVES = EMPLOYEE + "/leaves"; //GET /api/employee/leaves , POST /api/employee/leaves
+	public static final String LEAVES_DETAIL = EMPLOYEE + "/leaves"; //GET /api/employee/leaves/{id}
+	public static final String LEAVES_BALANCE = EMPLOYEE + "/leaves/{id}"; //GET /api/employee/leaves/{id}
+
+	public static final String ANNUAL_LEAVE_DETAILS = EMPLOYEE + "/annual-leave/details"; // GET /api/employee/annual-leave/details  - Yıllık izin kullanım detayları
+
+
 }
