@@ -34,7 +34,7 @@ public class CompanyInitializer {
                 .phone("03225554477")
                 .mail("hello@futuresoft.io")
                 .personalCount(70)
-                .companyState(ECompanyState.PENDING)
+                .companyState(ECompanyState.ACCEPTED)
                 .build();
 
         Company company5 = Company.builder()
@@ -50,7 +50,7 @@ public class CompanyInitializer {
                 .phone("05001231234")
                 .mail("contact@ecoware.org")
                 .personalCount(25)
-                .companyState(ECompanyState.DENIED)
+                .companyState(ECompanyState.ACCEPTED)
                 .build();
 
         Company company7 = Company.builder()
@@ -58,7 +58,7 @@ public class CompanyInitializer {
                 .phone("05449887766")
                 .mail("support@neonedge.ai")
                 .personalCount(80)
-                .companyState(ECompanyState.PENDING)
+                .companyState(ECompanyState.ACCEPTED)
                 .build();
 
         Company company8 = Company.builder()
@@ -74,7 +74,7 @@ public class CompanyInitializer {
                 .phone("05001112233")
                 .mail("team@codenation.dev")
                 .personalCount(95)
-                .companyState(ECompanyState.PENDING)
+                .companyState(ECompanyState.ACCEPTED)
                 .build();
 
         Company company10 = Company.builder()
@@ -82,7 +82,7 @@ public class CompanyInitializer {
                 .phone("03124443355")
                 .mail("contact@pixelpeak.com")
                 .personalCount(40)
-                .companyState(ECompanyState.DELETED)
+                .companyState(ECompanyState.ACCEPTED)
                 .build();
 
         return List.of(

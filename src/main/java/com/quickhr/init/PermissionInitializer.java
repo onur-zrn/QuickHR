@@ -61,6 +61,33 @@ public class PermissionInitializer {
                 .description("Taşınma nedeniyle ücretsiz izin")
                 .build());
 
+        permissions.add(Permission.builder()
+                .userId(22L)
+                .permissionType(EPermissionType.UNPAID_LEAVE)
+                .permissionState(EPermissionState.PENDING)
+                .beginDate(LocalDate.of(2025, 3, 1))
+                .endDate(LocalDate.of(2025, 3, 5))
+                .description("Taşınma nedeniyle ücretsiz izin")
+                .build());
+
+        permissions.add(Permission.builder()
+                .userId(33L)
+                .permissionType(EPermissionType.UNPAID_LEAVE)
+                .permissionState(EPermissionState.APPROVED)
+                .beginDate(LocalDate.of(2025, 3, 1))
+                .endDate(LocalDate.of(2025, 3, 5))
+                .description("Taşınma nedeniyle ücretsiz izin")
+                .build());
+
+        permissions.add(Permission.builder()
+                .userId(44L)
+                .permissionType(EPermissionType.UNPAID_LEAVE)
+                .permissionState(EPermissionState.PENDING)
+                .beginDate(LocalDate.of(2025, 3, 1))
+                .endDate(LocalDate.of(2025, 3, 5))
+                .description("Taşınma nedeniyle ücretsiz izin")
+                .build());
+
         return permissions;
     }
 }

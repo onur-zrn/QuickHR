@@ -80,8 +80,10 @@ public class EndPoints {
 	public static final String CREATE_LEAVE = EMPLOYEE + "/leaves"; // POST /api/employee/leaves
 	public static final String LEAVES_DETAIL = EMPLOYEE + "/leaves/{id}"; //GET /api/employee/leaves/{id}
 	public static final String LEAVES_BALANCE = EMPLOYEE + "/leaves/balance"; //GET /api/employee/leaves/balance
-
 	public static final String ANNUAL_LEAVE_DETAILS = EMPLOYEE + "/annual-leave/details"; // GET /api/employee/annual-leave/details  - Yıllık izin kullanım detayları
 
+	public static final String REQUEST_LEAVE = COMPANY + "/request-leave"; // GET /api/company/request-leave
+	public static final String APPROVED_LEAVE = COMPANY + "/approved-leave"; // GET /api/company/request-leave
+	public static final String IS_APPROVED_REQUEST_LEAVE = COMPANY + "/leave/{id}/approved-request-leave"; // PUT /api/company/leave/{id}/approve
 
 }

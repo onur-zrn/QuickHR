@@ -90,7 +90,10 @@ public enum ErrorType {
 	//PERMISSSIONS
 	PERMISSION_NOT_FOUND(4001, "PERMISSION not found!", HttpStatus.NOT_FOUND),
 	INSUFFICIENT_LEAVE_BALANCE(4002, "Yıllık izin bakiyesi yetersiz!", HttpStatus.BAD_REQUEST),
-	ALREADY_HAS_PENDING_LEAVE_REQUEST(4003, "Çalışanın cevaplanmamış bir izin talebi bulunmaktadır.", HttpStatus.BAD_REQUEST);
+	ALREADY_HAS_PENDING_LEAVE_REQUEST(4003, "Çalışanın cevaplanmamış bir izin talebi bulunmaktadır.", HttpStatus.BAD_REQUEST),
+	PERMISSION_STATE_DOESNT_PENDING(4004, "PERMISSION_STATE_DOESNT_PENDING!", HttpStatus.BAD_REQUEST),
+
+	;
 
 
 	// END
