@@ -16,7 +16,8 @@ import static com.quickhr.constant.EndPoints.*;
 @CrossOrigin(origins = "*")
 public class AuthController {
 	private final AuthService authService;
-	
+	private final AdminService adminService;
+
 	@PostMapping(REGISTER)
 	public ResponseEntity<BaseResponse<Boolean>> register(@RequestBody @Valid RegisterRequestDto dto) {
 		if (!dto.password().equals((dto.rePassword()))) throw new HRAppException(ErrorType.PASSWORD_MISMATCH);
@@ -43,6 +44,16 @@ public class AuthController {
 		                                     .success(true)
 		                                     .message("Login Successful!")
 		                                     .build());
+	}
+
+	@PostMapping(ADMIN_LOGIN)
+	public ResponseEntity<BaseResponse<AdminLoginResponseDto>> doLogin(@RequestBody @Valid AdminLoginRequestDto dto) {
+		return ResponseEntity.ok(BaseResponse.<AdminLoginResponseDto>builder()
+				.code(200)
+				.data(adminService.login(dto))
+				.success(true)
+				.message("Admin Login Successful!")
+				.build());
 	}
 
 	@GetMapping(FORGOT_PASSWORD)

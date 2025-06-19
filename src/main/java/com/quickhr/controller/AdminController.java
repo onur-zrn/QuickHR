@@ -30,16 +30,6 @@ public class AdminController {
                 .build());
     }
 
-    @PostMapping(ADMIN_LOGIN)
-    public ResponseEntity<BaseResponse<AdminLoginResponseDto>> doLogin(@RequestBody @Valid AdminLoginRequestDto dto) {
-        return ResponseEntity.ok(BaseResponse.<AdminLoginResponseDto>builder()
-                .code(200)
-                .data(adminService.login(dto))
-                .success(true)
-                .message("Admin Login Successful!")
-                .build());
-    }
-
     @GetMapping(PENDING_COMPANY)
     public ResponseEntity<BaseResponse<  List<CompanyStateResponseDto>>> pendingCompanies(@RequestParam String token) {
         List<CompanyStateResponseDto> pendingCompanies = adminService.listAllPendingCompanies(token);

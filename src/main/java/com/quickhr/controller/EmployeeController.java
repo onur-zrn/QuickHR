@@ -10,6 +10,7 @@ import lombok.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.quickhr.constant.EndPoints.*;
@@ -72,22 +73,24 @@ public class EmployeeController {
     public ResponseEntity<BaseResponse<Boolean>> createWorkHoliday(@RequestHeader String token, @RequestBody @Valid CreateLeaveRequestDto dto) {
 
         return ResponseEntity.ok(BaseResponse.<Boolean>builder().success(true)
-                .message("İzin oluşturuldu")
+                .message("İzin talebi oluşturuldu")
                 .code(200)
                 .data(permissionService.createWorkHoliday(token,dto))
                 .build());
 
     }
-//    @GetMapping(LEAVES)// - Kendi izin geçmişi (detaylı bilgiler dahil)
-//    public ResponseEntity<BaseResponse<Boolean>> createWorkHoliday(@RequestHeader String token, @RequestBody @Valid CreateLeaveRequestDto dto) {
-//
-//        return ResponseEntity.ok(BaseResponse.<Boolean>builder().success(true)
-//                .message("İzin oluşturuldu")
-//                .code(200)
-//                .data(permissionService.createWorkHoliday(token,dto))
-//                .build());
-//
-//    }
+
+    @GetMapping(LEAVES)
+    public ResponseEntity<BaseResponse<List<Permission>>> getAllMyLeaves(@RequestHeader String token) {
+        List<Permission> permissions = permissionService.getAllMyLeaves(token);
+
+        return ResponseEntity.ok(BaseResponse.<List<Permission>>builder()
+                .code(200)
+                .success(true)
+                .message("İzin geçmişi başarıyla getirildi.")
+                .data(permissions)
+                .build());
+    }
 
     @GetMapping(ANNUAL_LEAVE_DETAILS)
     public ResponseEntity<BaseResponse<AnnualLeaveDetailsDto>> getLeavesDetail(@RequestHeader String token) {

@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.quickhr.constant.EndPoints.*;
+
 @Configuration
 @Slf4j
 public class SecurityConfig {
@@ -29,10 +31,11 @@ public class SecurityConfig {
                                     "/v1/dev/user/register", "/v1/dev/user/doLogin",
                                     "/v1/dev/admin/doLogin"
                             ).permitAll()
-                            .requestMatchers("/admin/**", "/users/**").hasAuthority(EAdminRole.ADMIN.toString())
-                            //.requestMatchers("/admin/**", "/users/**").hasAuthority(EAdminRole.SUPER_ADMIN.toString())
-                            .requestMatchers("/manager/**").hasAuthority(EUserRole.MANAGER.toString())
-                            .requestMatchers("/personal/**").hasAuthority(EUserRole.PERSONAL.toString())
+//                            .requestMatchers(ADMIN + "/**").hasAuthority(EAdminRole.ADMIN.toString())
+//                            //.requestMatchers(ADMIN + "/**", "/users/**").hasAuthority(EAdminRole.SUPER_ADMIN.toString())
+//                            .requestMatchers(ADMIN + "/**").hasAuthority(EAdminRole.SUPER_ADMIN.toString())
+//                            .requestMatchers(COMPANY + "/**").hasAuthority(EUserRole.MANAGER.toString())
+//                            .requestMatchers(EMPLOYEE +"/**").hasAuthority(EUserRole.PERSONAL.toString())
                             .anyRequest().permitAll();
                 });
         http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);

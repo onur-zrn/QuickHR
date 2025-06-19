@@ -32,7 +32,7 @@ public enum EPermissionPolicy {
 
         LocalDate now = LocalDate.now();
         Period period = Period.between(dateOfEmployment, now);
-        long years = period.getYears();
+        int years = period.getYears();
 
         int izinGunu;
         if (years < 1) {
@@ -43,21 +43,24 @@ public enum EPermissionPolicy {
             izinGunu = MORE_THAN_TEN_YEARS.getDays();
         }
 
-        StringBuilder sb = new StringBuilder();
+        return String.format("""
+            Yıllık izin haklarınız çalışma sürenize göre aşağıdaki gibidir:
 
-        sb.append("Yıllık izin haklarınız çalışma sürenize göre aşağıdaki gibidir:\n\n");
-        sb.append(" - 0 ile 1 yıl arası çalışma süresi: ").append(LESS_THAN_ONE_YEAR.days).append(" gün izin hakkı.\n");
-        sb.append(" - 1 ile 10 yıl arası çalışma süresi: ").append(BETWEEN_ONE_AND_TEN_YEARS.days).append(" gün izin hakkı.\n");
-        sb.append(" - 10 yıldan fazla çalışma süresi: ").append(MORE_THAN_TEN_YEARS.days).append(" gün izin hakkı.\n\n");
+             - 0 ile 1 yıl arası çalışma süresi: %d gün izin hakkı.
+             - 1 ile 10 yıl arası çalışma süresi: %d gün izin hakkı.
+             - 10 yıldan fazla çalışma süresi: %d gün izin hakkı.
 
-        sb.append("Mevcut çalışma süreniz: ")
-                .append(period.getYears()).append(" yıl, ")
-                .append(period.getMonths()).append(" ay, ")
-                .append(period.getDays()).append(" gün.\n");
-
-        sb.append("Bu nedenle yıllık izin hakkınız toplam ").append(izinGunu).append(" gündür.");
-
-        return sb.toString();
+            Mevcut çalışma süreniz: %d yıl, %d ay, %d gün.
+            Bu nedenle yıllık izin hakkınız toplam %d gündür.
+            """,
+                LESS_THAN_ONE_YEAR.getDays(),
+                BETWEEN_ONE_AND_TEN_YEARS.getDays(),
+                MORE_THAN_TEN_YEARS.getDays(),
+                period.getYears(),
+                period.getMonths(),
+                period.getDays(),
+                izinGunu
+        );
     }
 
     //KAÇ GÜN İZİNİ VAR ONU BULMA  YILLIK İZİN AYRINTI METODUNDAN ÇAĞIR.

@@ -88,9 +88,9 @@ public enum ErrorType {
 	EXPIRED_REFRESH_TOKEN(514, "Refresh token has expired.", HttpStatus.BAD_REQUEST),
 
 	//PERMISSSIONS
-	PERMISSION_NOT_FOUND(4001, "PERMISSSION not found!", HttpStatus.NOT_FOUND),
-
-	;
+	PERMISSION_NOT_FOUND(4001, "PERMISSION not found!", HttpStatus.NOT_FOUND),
+	INSUFFICIENT_LEAVE_BALANCE(4002, "Yıllık izin bakiyesi yetersiz!", HttpStatus.BAD_REQUEST),
+	ALREADY_HAS_PENDING_LEAVE_REQUEST(4003, "Çalışanın cevaplanmamış bir izin talebi bulunmaktadır.", HttpStatus.BAD_REQUEST);
 
 
 	// END

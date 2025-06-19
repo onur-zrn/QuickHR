@@ -26,7 +26,7 @@ public class UserInitializer {
 				10L, "pixelpeak.com"
 		);
 		//manager1 manager1@technova.com  Aaa12345!
-			// user1  user11@technova.com  Aaa12345!
+		// user1  user11@technova.com  Aaa12345!
 
 		int userCounter = 1;
 

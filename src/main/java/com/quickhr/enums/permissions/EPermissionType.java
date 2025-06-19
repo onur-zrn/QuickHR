@@ -1,7 +1,7 @@
 package com.quickhr.enums.permissions;
 
 public enum EPermissionType {
-    MANDATORY("Zorunlu İzin"),
+    MANDATORY("Zorunlu İzin. Yıllık izinden düşmeyen izinler."),
     ANNUAL_LEAVE("Yıllık İzin"),
     UNPAID_LEAVE("Ücretsiz İzin");
 

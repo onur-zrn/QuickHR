@@ -7,6 +7,7 @@ import com.quickhr.entity.Permission;
 import com.quickhr.entity.User;
 import com.quickhr.enums.permissions.EPermissionPolicy;
 import com.quickhr.enums.permissions.EPermissionState;
+import com.quickhr.enums.permissions.EPermissionType;
 import com.quickhr.exception.ErrorType;
 import com.quickhr.exception.HRAppException;
 import com.quickhr.mapper.PermissionMapper;
@@ -16,6 +17,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,25 +64,78 @@ public class PermissionService {
 		return permission;
 	}
 
+	@Transactional
 	public Boolean createWorkHoliday(String token, @Valid CreateLeaveRequestDto dto) {
 		// Token'dan kullanıcıyı bul
-		User user = userService.getUserFromToken(token);
-		Permission permission = PermissionMapper.INSTANCE.toPermission(dto, user.getId());
-		permission.setPermissionState(EPermissionState.PENDING);
-
-		permissionRepository.save(permission);
-		return true;
-
-
-	}
-
-	//burada toplam izin ve kalan izin olacak DEVAMINI YAP
-	public AnnualLeaveDetailsDto getAnnualLeavesDetail(String token) {
 		User employee_user = userService.getUserFromToken(token);
 		Employee employee = employeeService.getEmployeeByUserId(employee_user.getId())
 				.orElseThrow(() -> new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND));
-		int totalLeaves = EPermissionPolicy.getAnnualLeaveDays(employee.getDateOfEmployment());
-		int remainingLeaves; //DTO YAP VE DÖN.
-		return null;
+
+		// Çalışanın daha önce yapılmış ve beklemede olan izin talebi var mı?
+		boolean hasPendingRequest = permissionRepository.existsByUserIdAndPermissionState(
+				employee.getId(), EPermissionState.PENDING);
+
+		if (hasPendingRequest) {
+			throw new HRAppException(ErrorType.ALREADY_HAS_PENDING_LEAVE_REQUEST);
+		}
+
+		// Kalan izin
+		int remainingLeave = getAnnualLeaveDetailsDto(employee).remainingLeave();
+
+		// Talep edilen izin günü sayısı
+		int requestedLeave = (int) ChronoUnit.DAYS.between(dto.beginDate(), dto.endDate()) + 1;
+
+		// Talep edilen izin, kalan izinden fazla mı?
+		if (requestedLeave > remainingLeave) {
+			throw new HRAppException(ErrorType.INSUFFICIENT_LEAVE_BALANCE);
+		}
+
+		Permission permission = PermissionMapper.INSTANCE.toPermission(dto, employee_user.getId());
+		permission.setPermissionState(EPermissionState.PENDING);
+		permissionRepository.save(permission);
+		return true;
 	}
+
+	public AnnualLeaveDetailsDto getAnnualLeavesDetail(String token) {
+
+		User employee_user = userService.getUserFromToken(token);
+		Employee employee = employeeService.getEmployeeByUserId(employee_user.getId())
+				.orElseThrow(() -> new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND));
+
+		return getAnnualLeaveDetailsDto(employee);
+	}
+	public List<Permission> getAllMyLeaves(String token) {
+		User user = userService.getUserFromToken(token);
+
+		return permissionRepository.findAllByUserIdAndPermissionStateNot(
+				user.getId(),
+				EPermissionState.REJECTED
+		);
+	}
+
+	private AnnualLeaveDetailsDto getAnnualLeaveDetailsDto(Employee employee) {
+		int totalLeaves = EPermissionPolicy.getAnnualLeaveDays(employee.getDateOfEmployment());
+
+		// Bu yılın başı ve sonu
+		LocalDate startOfYear = LocalDate.now().withDayOfYear(1);
+		LocalDate endOfYear = LocalDate.now().withMonth(12).withDayOfMonth(31);
+
+		List<Permission> usedLeaves = permissionRepository.findAllByUserIdAndPermissionTypeAndPermissionStateAndBeginDateBetween(
+				employee.getUserId(),
+				EPermissionType.ANNUAL_LEAVE,
+				EPermissionState.APPROVED,
+				startOfYear,
+				endOfYear
+		);
+
+		// Gün toplamı
+		int used_leaves =  usedLeaves.stream()
+				.mapToInt(p -> (int) (p.getEndDate().toEpochDay() - p.getBeginDate().toEpochDay() + 1)) // her iki gün dahil
+				.sum();
+		int remainingLeaves = totalLeaves - used_leaves;
+
+		return new AnnualLeaveDetailsDto(totalLeaves, used_leaves, remainingLeaves);
+	}
+
+
 }

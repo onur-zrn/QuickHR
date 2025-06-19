@@ -25,6 +25,7 @@ public class EndPoints {
 	public static final String RESET_PASSWORD = AUTHENTICATION + "/reset-password"; // api/auth/reset-password
 	public static final String LOGOUT = AUTHENTICATION + "/logout"; // api/auth/logout
 	public static final String REFRESH_ACCESS_TOKEN  = AUTHENTICATION + "/refresh_access_token"; // api/auth/refresh_authentication_token
+	public static final String ADMIN_LOGIN = AUTHENTICATION + "/admin-login"; // api/auth/admin-login
 
 	// Public Api
 	public static final String HOMEPAGE_CONTENT =  PUBLIC_API + "/homepage-content"; // api/public-api/homepage-content
@@ -36,7 +37,6 @@ public class EndPoints {
 
 	// Admin
 	public static final String ADMIN_DASHBOARD = ADMIN + "/dashboard"; // api/admin/dashboard
-	public static final String ADMIN_LOGIN = ADMIN + "/admin-login"; // api/admin/admin-login
 	public static final String PENDING_COMPANY = ADMIN + "/pending-company"; // api/admin/pending-company
 	public static final String ACCEPTED_COMPANY = ADMIN + "/accepted-company"; // api/admin/accepted-company
 	public static final String CHANGE_COMPANY_STATUS = ADMIN + "/change-company-status"; // api/admin/change-company-status
