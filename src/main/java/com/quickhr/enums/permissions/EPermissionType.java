@@ -4,7 +4,6 @@ public enum EPermissionType {
     MANDATORY("Zorunlu İzin"),
     ANNUAL_LEAVE("Yıllık İzin"),
     UNPAID_LEAVE("Ücretsiz İzin");
-    //EMPLOYED("Çalışıyor");
 
     private final String description;
 

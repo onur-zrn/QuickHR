@@ -49,7 +49,7 @@ public class EndPoints {
 	// Company
 	public static final String COMPANY_DASHBOARD = COMPANY + "/dashboard"; // api/company/dashboard
 
-	// Employee
+	// Employee (EMPLOYEE_DASHBOARD -> izinler bittiğinde güncellenecek)
 	public static final String EMPLOYEE_DASHBOARD = EMPLOYEE + "/dashboard"; // api/employee/dashboard
 
 	// User

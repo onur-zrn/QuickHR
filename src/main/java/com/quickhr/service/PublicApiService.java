@@ -3,6 +3,7 @@ package com.quickhr.service;
 import com.quickhr.dto.response.*;
 import com.quickhr.entity.*;
 import com.quickhr.exception.*;
+import com.quickhr.init.PublicApiInitializer;
 import com.quickhr.repository.*;
 import lombok.*;
 import org.springframework.stereotype.Service;
@@ -43,34 +44,17 @@ public class PublicApiService {
 
 	// Home Page Content
 	public HomePageContentResponseDto getHomePageContent() {
-		return new HomePageContentResponseDto(
-				"Welcome to QuickHR",
-				"Fast, Reliable, Effective Human Resources Solutions",
-				List.of(
-						"7/24 Live Support",
-						"User Friendly Interface",
-						"Easy Personal Management",
-						"Automatic Tracking (Holidays/Permission)"
-				)
-		);
+		return PublicApiInitializer.homePageContent();
 	}
 
 	// Platform Features
 	public PlatformFeaturesResponseDto getPlatformFeatures() {
-		return new PlatformFeaturesResponseDto(List.of(
-				"Automated Holidays & Permission Calculation",
-				"Employee Attendance Tracking",
-				"Detailed Reporting",
-				"Cloud-Based Access"
-		));
+		return PublicApiInitializer.platformFeatures();
 	}
 
 	// How It Works
 	public HowItWorksResponseDto getHowItWorks() {
-		return new HowItWorksResponseDto(
-				"How the Platform Works",
-				"QuickHR centralizes your HR data and simplifies your operations with real-time access to cloud-based features."
-		);
+		return PublicApiInitializer.howItWorks();
 	}
 
 }

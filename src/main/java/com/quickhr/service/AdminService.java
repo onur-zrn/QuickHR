@@ -21,8 +21,11 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AdminService {
     private final AdminRepository adminRepository;
+
     private final PasswordEncoder passwordEncoder;
     private final CompanyService companyService;
+    private final EmployeeService employeeService;
+
     private final JwtManager jwtManager;
     private final RefreshTokenService refreshTokenService;
     private final CompanyMapper companyMapper;
@@ -33,16 +36,13 @@ public class AdminService {
 
     public AdminDashboardResponseDto getAdminDashboard(String token) {
         getAdminFromToken(token);
-        return new AdminDashboardResponseDto(
+        return AdminDashboardResponseDto.of(
                 "Admin Dashboard",
-                150,
-                4500,
-                85,
-                List.of(
-                        "New company registration: TechCorp",
-                        "User john doe updated profile",
-                        "System backup completed"
-                )
+                companyService.countCompanies(),
+                companyService.countActiveCompanies(),
+                employeeService.countPersonal(),
+                employeeService.countActivePersonal()
+
         );
     }
 

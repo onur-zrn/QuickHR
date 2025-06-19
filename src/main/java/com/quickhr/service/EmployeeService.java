@@ -30,6 +30,23 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    public Long countPersonal() {
+        return employeeRepository.countPersonal();
+    }
+
+    public Long countActivePersonal() {
+        return employeeRepository.countActivePersonal();
+    }
+
+    public Long countActivePersonalByCompanyId(Long companyId) {
+        return employeeRepository.countActivePersonalByCompanyId(companyId);
+    }
+
+    public Long countApprovedPermissionsToday() {
+        return employeeRepository.countApprovedPermissionsToday();
+    }
+
+
     public Optional<Employee> getEmployeeByUserId(Long id) {
         return employeeRepository.findByUserId(id);
     }

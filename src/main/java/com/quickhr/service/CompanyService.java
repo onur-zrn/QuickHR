@@ -30,14 +30,24 @@ public class CompanyService {
 	private final MemberShipService memberShipService;
 	private final UserService userService;
 	private final EmployeeService employeeService;
+	private final PublicHolidayService publicHolidayService;
 	private final PasswordEncoder passwordEncoder;
 
 	public Company save(Company company) {
 		return companyRepository.save(company);
 	}
 
+
 	public List<Company> findAllCompany() {
 		return companyRepository.findAll();
+	}
+
+	public Long countCompanies() {
+		return companyRepository.countCompanies();
+	}
+
+	public Long countActiveCompanies() {
+		return companyRepository.countActiveCompanies();
 	}
 
 	public Optional<Company> getCompanyByName(String name) {
@@ -58,31 +68,18 @@ public class CompanyService {
 			memberShipService.createOrFindMemberShip(companyOptional.get().getId());
 			return companyOptional.get();
 		}
-		
+
 		Company company = Company.builder()
-		                         .name(companyName)
-		                         .companyState(ECompanyState.PENDING)
-		                         .build();
+				.name(companyName)
+				.companyState(ECompanyState.PENDING)
+				.build();
 		company = companyRepository.save(company);
 		memberShipService.createMemberShip(company.getId());
 		return company;
 	}
 
 	public CompanyDashboardResponseDto getCompanyDashboard(String token) {
-		userService.getUserFromToken(token);
-		return new CompanyDashboardResponseDto(
-				"Company Dashboard",
-				120,     // Total employees
-				15,                  // Pending leave requests
-				List.of(
-						"New Year (Jan 1)",
-						"National Holiday (Apr 23)"
-				),
-				List.of(
-						"Monthly performance review scheduled",
-						"New HR policy update"
-				)
-		);
+		return publicHolidayService.getCompanyDashboard(token);
 	}
 
 	public List<Company> findAllByCompanyState(ECompanyState state) {
@@ -323,5 +320,6 @@ public class CompanyService {
 		}
 		return users;
 	}
+
 
 }

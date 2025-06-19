@@ -1,5 +1,6 @@
 package com.quickhr.entity;
 
+import com.quickhr.enums.permissions.EPermissionType;
 import com.quickhr.enums.user.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -68,4 +69,5 @@ public class Employee extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private EUserState userState;
+
 }
