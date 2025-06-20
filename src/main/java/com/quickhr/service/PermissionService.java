@@ -67,7 +67,6 @@ public class PermissionService {
 		return permission;
 	}
 
-	@Transactional
 	public Boolean createWorkHoliday(String token, @Valid CreateLeaveRequestDto dto) {
 		// Token'dan kullanıcıyı bul
 		User employee_user = userService.getUserFromToken(token);

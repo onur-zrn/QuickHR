@@ -4,9 +4,6 @@ public enum EPermissionState {
     PENDING("Bekliyor"),
     APPROVED("Onaylandı"),
     REJECTED("Reddedildi");
-//    CANCELLED("İptal edildi"),
-//    IN_PROGRESS("İzinde"),
-//    COMPLETED("İzin bitti)");
 
     private final String description;
 
