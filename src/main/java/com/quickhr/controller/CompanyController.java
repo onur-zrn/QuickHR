@@ -2,9 +2,7 @@ package com.quickhr.controller;
 
 import com.quickhr.dto.request.EmployeeRequestDto;
 import com.quickhr.dto.request.EmployeeUpdateRequestDto;
-import com.quickhr.dto.request.isApprovedRequestLeaveRequestDto;
 import com.quickhr.dto.response.*;
-import com.quickhr.entity.Permission;
 import com.quickhr.enums.user.EUserState;
 import com.quickhr.service.*;
 import jakarta.validation.Valid;
@@ -28,7 +26,6 @@ import static com.quickhr.constant.EndPoints.*;
 public class CompanyController {
     private final CompanyService companyService;
     private final EmployeeService employeeService;
-    private final PermissionService permissionService;
 
     @GetMapping(COMPANY_DASHBOARD)
     public ResponseEntity<BaseResponse<CompanyDashboardResponseDto>> getCompanyDashboard(@RequestParam String token) {
@@ -198,44 +195,6 @@ public class CompanyController {
                 .data(result)
                 .success(true)
                 .message("Personal soft delete successfully!")
-                .build());
-    }
-
-    @GetMapping(REQUEST_LEAVE)
-    public ResponseEntity<BaseResponse<List<Permission>>> requestLeave(@RequestParam String token) {
-        return ResponseEntity.ok(BaseResponse.<List<Permission>>builder()
-                .code(200)
-                .data(permissionService.pendingLeave(token))
-                .success(true)
-                .message("Request Leave brought in!")
-                .build());
-    }
-
-    @GetMapping(APPROVED_LEAVE)
-    public ResponseEntity<BaseResponse<List<Permission>>> approvedLeave(@RequestParam String token) {
-        return ResponseEntity.ok(BaseResponse.<List<Permission>>builder()
-                .code(200)
-                .data(permissionService.approvedLeave(token))
-                .success(true)
-                .message("Approved Leave brought in!")
-                .build());
-    }
-
-    @PutMapping(IS_APPROVED_REQUEST_LEAVE)
-    public ResponseEntity<BaseResponse<Boolean>> isApprovedRequestLeave (@RequestParam String token,
-                                                                         isApprovedRequestLeaveRequestDto dto) {
-        Boolean result = permissionService.isApprovedRequestLeave(token, dto);
-        String message;
-        if (result) {
-            message = "RequestLeave Approved!";
-        } else {
-            message = "RequestLeave Rejected!";
-        }
-        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
-                .code(200)
-                .data(result)
-                .success(true)
-                .message(message)
                 .build());
     }
 }

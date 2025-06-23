@@ -58,18 +58,12 @@ public class EndPoints {
 	public static final String MAKE_PERSONAL_STATUS_IN_ACTIVE = "/employee/{id}/active"; // PUT /api/company/employee/{id}/active
 	public static final String MAKE_PERSONAL_STATUS_IN_PASSIVE = "/employee/{id}/passive"; // PUT /api/company/employee/{id}/passive
 	public static final String CHANGE_PERSONAL_STATUS = "/employee/{id}/change-personal-status"; // PUT /api/company/employee/{id}/change-personal-status
-	public static final String REQUEST_LEAVE = "/request-leave"; // GET /api/company/request-leave
-	public static final String APPROVED_LEAVE = "/approved-leave"; // GET /api/company/request-leave
-	public static final String IS_APPROVED_REQUEST_LEAVE = "/leave/{id}/approved-request-leave"; // PUT /api/company/leave/{id}/approve
 
 	// Employee (EMPLOYEE_DASHBOARD -> izinler bittiğinde güncellenecek)
 	public static final String EMPLOYEE_DASHBOARD = "/dashboard"; // api/employee/dashboard
 	public static final String UPDATE_PERSONAL_PROFILE = "/update"; // PUT api/company/update
-	public static final String LEAVES = "/all-leaves"; //GET /api/employee/all-leaves
-	public static final String CREATE_LEAVE = "/create-leave"; // POST /api/employee/leaves
-	public static final String LEAVES_DETAIL = "/leaves-detail/{id}"; //GET /api/employee/leaves/{id}
-	public static final String LEAVES_BALANCE = "/leaves-balance"; //GET /api/employee/leaves/balance
-	public static final String ANNUAL_LEAVE_DETAILS = "/annual-leave-details"; // GET /api/employee/annual-leave-details
+
+
 
 	// User
 	public static final String USER_PROFILE = "/profile"; // GET /api/users/profile, PUT /api/users/profile
@@ -77,5 +71,23 @@ public class EndPoints {
 	public static final String USER_VERIFY_EMAIL = "/verify-email"; // PUT /api/users/change-email
 	public static final String USER_CHANGE_PASSWORD = "/change-password"; // PUT /api/users/change-password
 	public static final String USER_DEACTIVATE = "/deactivate"; // PUT /api/users/deactivate
+
+	//Permissions
+
+	public static final String REQUEST_LEAVE = COMPANY +  "/request-leave"; // GET /api/company/request-leave
+	public static final String APPROVED_LEAVE = COMPANY + "/approved-leave"; // GET /api/company/request-leave
+	public static final String IS_APPROVED_REQUEST_LEAVE = COMPANY + "/leave/{id}/approved-request-leave"; // PUT /api/company/leave/{id}/approve
+
+	public static final String LEAVES = EMPLOYEE + "/all-leaves"; //GET /api/employee/all-leaves
+	public static final String CREATE_LEAVE = EMPLOYEE + "/create-leave"; // POST /api/employee/leaves
+	public static final String LEAVES_DETAIL = EMPLOYEE + "/leaves-detail/{id}"; //GET /api/employee/leaves/{id}
+	public static final String LEAVES_BALANCE = EMPLOYEE + "/leaves-balance"; //GET /api/employee/leaves/balance
+	public static final String ANNUAL_LEAVE_DETAILS = EMPLOYEE + "/annual-leave-details"; // GET /api/employee/annual-leave-details
+
+	//
+
+	public static final String EXPENSES = EMPLOYEE + "/expenses"; // GET /api/employee/expenses
+	public static final String EXPENSE_DETAIL = EMPLOYEE + "/expenses/{id}"; // GET /api/employee/expenses/{id}
+	public static final String CREATE_EXPENSE = EMPLOYEE + "/expenses"; // POST /api/employee/expenses
 
 }

@@ -15,6 +15,8 @@ public class DataInitializer {
 	private final PermissionRepository permissionRepository;
 	private final PublicHolidaysRepository publicHolidaysRepository;
 
+	private final PersonalSpendingRepository personalSpendingRepository;
+
 	@PostConstruct
 	public void init() {
 		if (userRepository.count() == 0) {
@@ -39,6 +41,10 @@ public class DataInitializer {
 
 		if (publicHolidaysRepository.count() == 0) {
 			publicHolidaysRepository.saveAll(PublicHolidaysInitializer.publicHolidayInitializer());
+		}
+
+		if (personalSpendingRepository.count() == 0) {
+			personalSpendingRepository.saveAll(SpendingInitializer.spendingInitializer());
 		}
 
 		System.out.println("✅ DataInitializer data has been loaded successfully!");

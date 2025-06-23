@@ -106,6 +106,7 @@ public class PermissionService {
 
 		return getAnnualLeaveDetailsDto(employee);
 	}
+
 	public List<Permission> getAllMyLeaves(String token) {
 		User user = userService.getUserFromToken(token);
 
