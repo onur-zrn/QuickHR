@@ -24,21 +24,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(cors -> cors.configurationSource(new CorsConfig().corsConfigurationSource()))
-                .authorizeHttpRequests(req -> {
+        http.authorizeHttpRequests(req -> {
                     req.requestMatchers(
-                                    "/swagger-ui/**", "/api-docs/**",
-                                    "/v1/dev/user/register", "/v1/dev/user/doLogin",
-                                    "/v1/dev/admin/doLogin"
-                            ).permitAll()
-//                            .requestMatchers(ADMIN + "/**").hasAuthority(EAdminRole.ADMIN.toString())
-//                            //.requestMatchers(ADMIN + "/**", "/users/**").hasAuthority(EAdminRole.SUPER_ADMIN.toString())
-//                            .requestMatchers(ADMIN + "/**").hasAuthority(EAdminRole.SUPER_ADMIN.toString())
-//                            .requestMatchers(COMPANY + "/**").hasAuthority(EUserRole.MANAGER.toString())
-//                            .requestMatchers(EMPLOYEE +"/**").hasAuthority(EUserRole.PERSONAL.toString())
-                            .anyRequest().permitAll();
+                            "/swagger-ui/**", "/api-docs/**")
+                            .permitAll()
+                            //.requestMatchers(ADMIN + "/**").hasAuthority(EAdminRole.ADMIN.toString())
+                            //.requestMatchers(ADMIN + "/**", "/users/**").hasAuthority(EAdminRole.SUPER_ADMIN.toString())
+                           // .requestMatchers(ADMIN + "/**").hasAuthority(EAdminRole.SUPER_ADMIN.toString())
+
+//                          .requestMatchers(ADMIN + "/**").hasAnyAuthority(EAdminRole.ADMIN.toString(), EAdminRole.SUPER_ADMIN.toString())
+//                          .requestMatchers(COMPANY + "/**").hasAuthority(EUserRole.MANAGER.toString())
+//                          .requestMatchers(EMPLOYEE + "/**").hasAuthority(EUserRole.PERSONAL.toString())
+                         .anyRequest().permitAll();
                 });
-        http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
         http.csrf(AbstractHttpConfigurer::disable);
         http.addFilterBefore(getJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();

@@ -5,6 +5,7 @@ import com.quickhr.service.*;
 import com.quickhr.enums.*;
 import com.quickhr.enums.user.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,14 +16,15 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JwtUserDetails implements UserDetailsService {
     private final UserService userService;
-    
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;
     }
-    
+
     public  UserDetails getUserById(Long userId){
         Optional<User> userOptional = userService.findUserById(userId);
         if(userOptional.isEmpty()){
@@ -35,16 +37,16 @@ public class JwtUserDetails implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority(EAdminRole.SUPER_ADMIN.toString()));
         authorities.add(new SimpleGrantedAuthority(EUserRole.MANAGER.toString()));
         authorities.add(new SimpleGrantedAuthority(EUserRole.PERSONAL.toString()));
-        
+
         User user = userOptional.get();
-        
+
         return org.springframework.security.core.userdetails.User.builder()
-                                                                 .username(user.getMail())
-                                                                 .password(user.getPassword())
-                                                                 .accountExpired(false)
-                                                                 .accountLocked(false)
-                                                                 .authorities(authorities)
-                                                                 .build();
+                .username(user.getMail())
+                .password(user.getPassword())
+                .accountExpired(false)
+                .accountLocked(false)
+                .authorities(authorities)
+                .build();
     }
-    
+
 }

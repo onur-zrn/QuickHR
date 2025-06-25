@@ -31,6 +31,7 @@ public class AuthService {
 	private final RefreshTokenService refreshTokenService;
 	private final UserService userService;
 
+
 	@Transactional
 	public Boolean register(RegisterRequestDto dto) {
 		// Company Control (Current)
@@ -83,7 +84,7 @@ public class AuthService {
 		mailSenderService.sendMail(new MailSenderRequestDto(user.getMail(), generatedCode));
 		return true;
 	}
-	
+
 	public String activateCode(ActivateCodeRequestDto dto) {
 		// Find User
 		User user = userRepository.findById(dto.id())
@@ -158,7 +159,7 @@ public class AuthService {
 			throw new HRAppException(ErrorType.COMPANY_NOT_ACCEPTED);
 		}
 
-		String accessToken = jwtManager.generateAccessToken(user.getId());
+		String accessToken = jwtManager.generateAccessToken(user.getId(), user.getRole().toString());
 
 		String refreshToken = refreshTokenService.createRefreshToken(user.getId()).getToken();
 
@@ -297,8 +298,9 @@ public class AuthService {
 		User user = userService.findUserById(token.getAuthId())
 				.orElseThrow(() -> new HRAppException(ErrorType.USER_NOT_FOUND));
 
-		return jwtManager.generateAccessToken(user.getId());
+		return jwtManager.generateAccessToken(user.getId(),user.getRole().toString());
 	}
+
 
 	public void logout(String token) {
 		jwtManager.deleteRefreshToken(token);

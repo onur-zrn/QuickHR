@@ -6,6 +6,7 @@ import com.quickhr.entity.*;
 import com.quickhr.enums.EAdminRole;
 import com.quickhr.enums.EState;
 import com.quickhr.enums.company.ECompanyState;
+import com.quickhr.enums.user.EUserRole;
 import com.quickhr.exception.*;
 import com.quickhr.mapper.CompanyMapper;
 import com.quickhr.repository.*;
@@ -58,7 +59,7 @@ public class AdminService {
             throw new HRAppException(ErrorType.INVALID_USERNAME_OR_PASSWORD);
         }
 
-        String accessToken = jwtManager.generateAccessToken(admin.getId());
+        String accessToken = jwtManager.generateAccessToken(admin.getId(), admin.getAdminRole().toString());
         String refreshToken = refreshTokenService.createRefreshToken(admin.getId()).getToken();
 
         return new AdminLoginResponseDto(accessToken, refreshToken, admin.getAdminRole());
@@ -116,7 +117,7 @@ public class AdminService {
         Admin admin = findAdminById(token.getAuthId())
                 .orElseThrow(() -> new HRAppException(ErrorType.USER_NOT_FOUND));
 
-        return jwtManager.generateAccessToken(admin.getId());
+        return jwtManager.generateAccessToken(admin.getId(), admin.getAdminRole().toString());
     }
 
     @Transactional
