@@ -32,9 +32,9 @@ public class SecurityConfig {
                             //.requestMatchers(ADMIN + "/**", "/users/**").hasAuthority(EAdminRole.SUPER_ADMIN.toString())
                            // .requestMatchers(ADMIN + "/**").hasAuthority(EAdminRole.SUPER_ADMIN.toString())
 
-//                          .requestMatchers(ADMIN + "/**").hasAnyAuthority(EAdminRole.ADMIN.toString(), EAdminRole.SUPER_ADMIN.toString())
-//                          .requestMatchers(COMPANY + "/**").hasAuthority(EUserRole.MANAGER.toString())
-//                          .requestMatchers(EMPLOYEE + "/**").hasAuthority(EUserRole.PERSONAL.toString())
+                          .requestMatchers(ADMIN + "/**").hasAnyAuthority(EAdminRole.ADMIN.toString(), EAdminRole.SUPER_ADMIN.toString())
+                          .requestMatchers(COMPANY + "/**").hasAuthority(EUserRole.MANAGER.toString())
+                          .requestMatchers(EMPLOYEE + "/**").hasAuthority(EUserRole.PERSONAL.toString())
                          .anyRequest().permitAll();
                 });
         http.csrf(AbstractHttpConfigurer::disable);
