@@ -32,7 +32,7 @@ public class JwtUserDetails implements UserDetailsService {
         }
         List<GrantedAuthority> authorities = new ArrayList<>();
         List<User> users = userService.findAllByUserId(userId);
-        users.forEach(userRole -> authorities.add(new SimpleGrantedAuthority(userRole.getRole().toString())));
+        // users.forEach(userRole -> authorities.add(new SimpleGrantedAuthority(userRole.getRole().toString())));
         authorities.add(new SimpleGrantedAuthority(EAdminRole.ADMIN.toString()));
         authorities.add(new SimpleGrantedAuthority(EAdminRole.SUPER_ADMIN.toString()));
         authorities.add(new SimpleGrantedAuthority(EUserRole.MANAGER.toString()));
