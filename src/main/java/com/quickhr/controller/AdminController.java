@@ -20,7 +20,7 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping(ADMIN_DASHBOARD)
-    public ResponseEntity<BaseResponse<AdminDashboardResponseDto>> getAdminDashboard(@RequestParam String token) {
+    public ResponseEntity<BaseResponse<AdminDashboardResponseDto>> getAdminDashboard(@RequestHeader String token) {
         AdminDashboardResponseDto dashboard = adminService.getAdminDashboard(token);
         return ResponseEntity.ok(BaseResponse.<AdminDashboardResponseDto>builder()
                 .code(200)

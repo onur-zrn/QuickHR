@@ -6,7 +6,6 @@ import com.quickhr.entity.*;
 import com.quickhr.enums.EAdminRole;
 import com.quickhr.enums.EState;
 import com.quickhr.enums.company.ECompanyState;
-import com.quickhr.enums.user.EUserRole;
 import com.quickhr.exception.*;
 import com.quickhr.mapper.CompanyMapper;
 import com.quickhr.repository.*;

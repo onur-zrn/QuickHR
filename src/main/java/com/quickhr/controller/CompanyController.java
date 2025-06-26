@@ -8,6 +8,9 @@ import com.quickhr.service.*;
 import jakarta.validation.Valid;
 import lombok.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Page;
@@ -28,8 +31,13 @@ public class CompanyController {
     private final EmployeeService employeeService;
 
     @GetMapping(COMPANY_DASHBOARD)
-    public ResponseEntity<BaseResponse<CompanyDashboardResponseDto>> getCompanyDashboard(@RequestParam String token) {
-        CompanyDashboardResponseDto dashboard = companyService.getCompanyDashboard(token);
+    public ResponseEntity<BaseResponse<CompanyDashboardResponseDto>> getCompanyDashboard(@RequestHeader String token) {
+
+
+       UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String id = userDetails.getUsername();
+        System.out.println(id);
+        CompanyDashboardResponseDto dashboard = companyService.getCompanyDashboard(String.valueOf(token));
         return ResponseEntity.ok(BaseResponse.<CompanyDashboardResponseDto>builder()
                 .code(200)
                 .data(dashboard)

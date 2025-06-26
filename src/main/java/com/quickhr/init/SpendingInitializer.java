@@ -62,7 +62,65 @@ public class SpendingInitializer {
                 .spendingState(ESpendingState.PENDING)
                 .spendingType(ESpendingType.MEAL)
                 .build());
+        spendings.add(PersonalSpending.builder()
+                .userId(11L)
+                .description("Araç yakıt gideri")
+                .billDocumentUrl(null)
+                .billAmount(400.00)
+                .spendingDate(LocalDate.of(2025, 6, 1))
+                .spendingState(ESpendingState.APPROVED)
+                .spendingType(ESpendingType.MEAL)
+                .build());
 
+        spendings.add(PersonalSpending.builder()
+                .userId(11L)
+                .description("Ofis malzemeleri")
+                .billDocumentUrl(null)
+                .billAmount(150.00)
+                .spendingDate(LocalDate.of(2025, 6, 1))  // Aynı gün
+                .spendingState(ESpendingState.APPROVED)
+                .spendingType(ESpendingType.OFFICE_SUPPLIES)
+                .build());
+
+        spendings.add(PersonalSpending.builder()
+                .userId(11L)
+                .description("Müşteri yemeği")
+                .billDocumentUrl(null)
+                .billAmount(350.00)
+                .spendingDate(LocalDate.of(2025, 6, 5))
+                .spendingState(ESpendingState.APPROVED)
+                .spendingType(ESpendingType.MEAL)
+                .build());
+
+        spendings.add(PersonalSpending.builder()
+                .userId(11L)
+                .description("Toplantı için su ve atıştırmalık")
+                .billDocumentUrl(null)
+                .billAmount(75.00)
+                .spendingDate(LocalDate.of(2025, 6, 5))  // Aynı gün
+                .spendingState(ESpendingState.APPROVED)
+                .spendingType(ESpendingType.MEAL)
+                .build());
+
+        spendings.add(PersonalSpending.builder()
+                .userId(11L)
+                .description("Yazılım lisansı")
+                .billDocumentUrl(null)
+                .billAmount(600.00)
+                .spendingDate(LocalDate.of(2025, 5, 28))
+                .spendingState(ESpendingState.APPROVED)
+                .spendingType(ESpendingType.SOFTWARE)
+                .build());
+
+        spendings.add(PersonalSpending.builder()
+                .userId(11L)
+                .description("İş seyahati otel masrafı")
+                .billDocumentUrl(null)
+                .billAmount(1200.00)
+                .spendingDate(LocalDate.of(2025, 5, 28))  // Aynı gün
+                .spendingState(ESpendingState.APPROVED)
+                .spendingType(ESpendingType.ACCOMMODATION)
+                .build());
         return spendings;
     }
 }

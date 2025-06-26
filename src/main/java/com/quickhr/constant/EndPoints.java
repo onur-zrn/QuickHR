@@ -63,8 +63,6 @@ public class EndPoints {
 	public static final String EMPLOYEE_DASHBOARD = "/dashboard"; // api/employee/dashboard
 	public static final String UPDATE_PERSONAL_PROFILE = "/update"; // PUT api/company/update
 
-
-
 	// User
 	public static final String USER_PROFILE = "/profile"; // GET /api/users/profile, PUT /api/users/profile
 	public static final String USER_CHANGE_EMAIL = "/change-email"; // PUT /api/users/change-email
@@ -84,10 +82,21 @@ public class EndPoints {
 	public static final String LEAVES_BALANCE = EMPLOYEE + "/leaves-balance"; //GET /api/employee/leaves/balance
 	public static final String ANNUAL_LEAVE_DETAILS = EMPLOYEE + "/annual-leave-details"; // GET /api/employee/annual-leave-details
 
-	//
+	// Expenses - Employee
 
 	public static final String EXPENSES = EMPLOYEE + "/expenses"; // GET /api/employee/expenses
 	public static final String EXPENSE_DETAIL = EMPLOYEE + "/expenses/{id}"; // GET /api/employee/expenses/{id}
 	public static final String CREATE_EXPENSE = EMPLOYEE + "/expenses"; // POST /api/employee/expenses
+	public static final String UPDATE_EXPENSE = EMPLOYEE + "/expenses/{id}"; // PUT /api/employee/expenses/{id} - Harcama güncelle
+	public static final String DELETE_EXPENSE = EMPLOYEE + "/expenses/{id}"; // DELETE /api/employee/expenses/{id} - Harcama sil (pending ise)
+
+	// Expenses - Manager
+	public static final String PENDING_EXPENSES_MANAGER = COMPANY + "/expenses/pending"; // GET /api/company/expenses/pending - Onay bekleyen harcamalar
+	public static final String APPROVED_EXPENSES_MANAGER = COMPANY + "/expenses/approved"; // GET /api/company/expenses/approved - Onaylanmış harcamalar
+	public static final String REJECTED_EXPENSES_MANAGER = COMPANY + "/expenses/rejected"; // GET /api/company/expenses/rejected - Reddedilmiş harcamalar
+	public static final String EXPENSES_LIST_MANAGER = COMPANY + "/expenses"; // GET /api/company/expenses - Personel harcamalarını listele
+	public static final String EXPENSE_DETAILS_MANAGER = COMPANY + "/expenses/{id}"; // GET /api/company/expenses/{id} - Harcama detayları
+	public static final String APPROVE_REJECT_EXPENSE = COMPANY + "/expenses/approve-reject";
+
 
 }

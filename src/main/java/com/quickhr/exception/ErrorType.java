@@ -66,8 +66,13 @@ public enum ErrorType {
 	//PERMISSION
 	PERMISSION_NOT_FOUND(3001, "İzin bulunamadı!", HttpStatus.NOT_FOUND),
 	PERMISSION_STATE_DOESNT_PENDING(3002, "İzin durumu 'PENDING' değildir!", HttpStatus.BAD_REQUEST),
-	ALREADY_HAS_PENDING_LEAVE_REQUEST(4003, "Çalışanın cevaplanmamış bir izin talebi bulunmaktadır.", HttpStatus.BAD_REQUEST),
-	INSUFFICIENT_LEAVE_BALANCE(4004, "Yıllık izin bakiyesi yetersiz!", HttpStatus.BAD_REQUEST),
+	ALREADY_HAS_PENDING_LEAVE_REQUEST(3003, "Çalışanın cevaplanmamış bir izin talebi bulunmaktadır.", HttpStatus.BAD_REQUEST),
+	INSUFFICIENT_LEAVE_BALANCE(3004, "Yıllık izin bakiyesi yetersiz!", HttpStatus.BAD_REQUEST),
+
+	// EXPENSES
+	EXPENSE_NOT_FOUND(1001, "Harcama bulunamadı!", HttpStatus.NOT_FOUND),
+	INVALID_EXPENSE_OPERATION(1002, "Bu işlem yalnızca bekleyen harcamalar için yapılabilir.", HttpStatus.BAD_REQUEST),
+
 
 	// COMMON
 	VALIDATION_EXCEPTION(500, "Bir veya birden fazla alan geçersiz! Lütfen giriş bilgilerinizi kontrol ederek tekrar deneyin!", HttpStatus.UNPROCESSABLE_ENTITY),
@@ -87,16 +92,14 @@ public enum ErrorType {
 	INVALID_REFRESH_TOKEN(514, "Geçersiz yenileme (refresh) token!", HttpStatus.BAD_REQUEST),
 	EXPIRED_REFRESH_TOKEN(515, "Yenileme (refresh) token süresi dolmuş!", HttpStatus.BAD_REQUEST),
 	MAIL_ALREADY_TAKEN(516, "Bu e-posta adresi zaten kullanımda!", HttpStatus.BAD_REQUEST),
-	MAIL_SAME(517, "Yeni e-posta adresi, mevcut adresinizle aynı! Lütfen farklı bir e-posta girin!", HttpStatus.BAD_REQUEST),
+	MAIL_SAME(517, "Yeni e-posta adresi, mevcut adresinizle aynı! Lütfen farklı bir e-posta girin!", HttpStatus.BAD_REQUEST)
 
 
 
 
 
 
-
-	// END
-	;
+;
 
 	int code;
 	String message;
