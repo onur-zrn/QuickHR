@@ -4,7 +4,6 @@ import com.auth0.jwt.*;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.quickhr.enums.user.EUserRole;
 import com.quickhr.repository.RefreshTokenRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +70,22 @@ public class JwtManager {
 	@Transactional
 	public void deleteRefreshToken(String token) {
 		refreshTokenRepository.deleteByToken(token);
+	}
+
+	public Optional<String> getRoleFromToken(String token) {
+		try {
+			Algorithm algoritm = Algorithm.HMAC512(secretKey);
+			JWTVerifier verifier = JWT.require(algoritm).build();
+			DecodedJWT decodedJWT = verifier.verify(token);
+			if (decodedJWT == null) {
+				return Optional.empty();
+			}
+			String role = decodedJWT.getClaim("role").asString();
+			return Optional.ofNullable(role);
+		} catch (IllegalArgumentException | JWTVerificationException e) {
+			System.out.println(e.getMessage());
+			return Optional.empty();
+		}
 	}
 
 }

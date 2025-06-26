@@ -17,18 +17,20 @@ public class JWTTokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtManager jwtManager;
-    
+
     @Autowired
     private JwtUserDetails jwtUserDetails;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
-        if (Objects.nonNull(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);
-            Optional<Long> userId = jwtManager.validateToken(token);
-            if (userId.isPresent()) {
-                UserDetails userDetails = jwtUserDetails.getUserById(userId.get());
+
+            // Burada sadece userId değil, token ile userdetails alıyoruz
+            UserDetails userDetails = jwtUserDetails.loadUserByToken(token);
+
+            if (userDetails != null) {
                 UsernamePasswordAuthenticationToken authenticationToken
                         = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
