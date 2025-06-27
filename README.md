@@ -7,7 +7,10 @@ A web application developed to optimize and simplify human resources workflows f
 A web-based platform designed to help businesses manage their HR (Human Resources) and personnel processes efficiently. 
 It includes essential HR modules and enables the digital tracking and management of authentication, authorization, user administration, and company operations.
 
-🔐 Authentication & Authorization 👤 User Management 🏢 Company Administration 📊 Digital Tracking of Employee Activities  
+ 🔐 Authentication & Authorization
+ 👤 User Management
+- 🏢 Company Administration
+- 📊 Digital Tracking of Employee Activities  
 
 ## 🚀 Key Features
 
