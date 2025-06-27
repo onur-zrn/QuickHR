@@ -9,7 +9,7 @@ It includes essential HR modules and enables the digital tracking and management
 
 
 ******
-# 💼 QuickHR
+💼 QuickHR
 
 A web-based platform designed to help businesses manage their HR (Human Resources) and personnel processes efficiently.
 
