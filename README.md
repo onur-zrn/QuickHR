@@ -7,19 +7,19 @@ A web application developed to optimize and simplify human resources workflows f
 A web-based platform designed to help businesses manage their HR (Human Resources) and personnel processes efficiently. 
 It includes essential HR modules and enables the digital tracking and management of authentication, authorization, user administration, and company operations.
 
-  It includes core HR modules and enables seamless:
-  🔐 Authentication & Authorization  
-  👤 User Management  
-  🏢 Company Administration  
-  📊 Digital Tracking of Employee Activities  
+It includes core HR modules and enables seamless:
+🔐 Authentication & Authorization
+👤 User Management
+🏢 Company Administration
+📊 Digital Tracking of Employee Activities  
 
 ## 🚀 Key Features
 
 📂 Modular HR System Architecture  
-🛡️ Role-based access control  
-📧 E-mail Verification & Account Activation  
-📅 Shift, Leave, and Personnel Tracking  
-📈 Admin and employee dashboards  
+🛡️ Role-Based Access Control  
+📧 Email Verification & Account Activation  
+📅 Shift & Leave & Personnel Tracking  
+📈 Admin & Company & Employee Dashboards  
 
 ## 🛠️ Technologies Used
 
@@ -31,7 +31,10 @@ It includes essential HR modules and enables the digital tracking and management
 
 ## 👥 Developed By
 
-- **Mehmet Ali HAYTA** - **Onur ZEREN** - **Tuğberk Özoğlu** - **Yunus ERASLAN**
+- **Mehmet Ali HAYTA**
+- **Onur ZEREN**
+- **Tuğberk Özoğlu**
+- **Yunus ERASLAN**
 
 
 > (Here you can add screenshots or GIFs of your project UI)
