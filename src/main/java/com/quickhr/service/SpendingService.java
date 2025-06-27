@@ -2,9 +2,11 @@ package com.quickhr.service;
 
 import com.quickhr.dto.request.CreatePersonalSpendingRequestDto;
 import com.quickhr.dto.request.ExpenseApproveRejectRequestDto;
+import com.quickhr.dto.request.GetMonthlySummaryRequestDto;
 import com.quickhr.dto.request.UpdatePersonalSpendingRequestDto;
 import com.quickhr.dto.response.PersonalSpendingDetailResponseDto;
 import com.quickhr.dto.response.PersonalSpendingSummaryDto;
+import com.quickhr.dto.response.PersonalSpendingSummaryWithTotalResponseDto;
 import com.quickhr.entity.PersonalSpending;
 import com.quickhr.entity.User;
 import com.quickhr.enums.spendings.ESpendingState;
@@ -14,6 +16,10 @@ import com.quickhr.exception.HRAppException;
 import com.quickhr.mapper.PersonalSpendingMapper;
 import com.quickhr.repository.PersonalSpendingRepository;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -23,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -75,26 +82,6 @@ public class SpendingService {
         return true;
     }
 
-
-//    public PersonalSpendingDetailResponseDto createExpense2(CreatePersonalSpendingRequestDto dto, MultipartFile billDocument, String token) {
-//        User user = userService.getUserFromToken(token);
-//
-//        // Dosyayı kaydet
-//        String savedPath = fileStorageService.save(billDocument, user.getId());
-//
-//        // DTO'dan entity oluştur
-//        PersonalSpending expense = PersonalSpendingMapper.INSTANCE.toPersonalSpending(dto);
-//        expense.setUserId(user.getId());
-//        expense.setBillDocumentUrl(savedPath);
-//        expense.setSpendingState(ESpendingState.PENDING);
-//
-//        // Veritabanına kaydet
-//        PersonalSpending saved = personalSpendingRepository.save(expense);
-//
-//        // Detail DTO'ya çevir
-//        return PersonalSpendingMapper.INSTANCE.toPersonalSpendingDetailResponseDto(saved);
-//    }
-
     public Boolean updateExpense(String token, Long id, UpdatePersonalSpendingRequestDto dto) {
         User user = userService.getUserFromToken(token);
         PersonalSpending expense = personalSpendingRepository.findById(id)
@@ -104,8 +91,14 @@ public class SpendingService {
             throw new HRAppException(ErrorType.UNAUTHORIZED_OPERATION);
         }
 
+        // Eğer durum PENDING değilse silmeye izin verme
+        if (expense.getSpendingState() != ESpendingState.PENDING) {
+            throw new HRAppException(ErrorType.INVALID_EXPENSE_OPERATION);
+        }
+
         // Null olan alanlar es geçilecek
         PersonalSpendingMapper.INSTANCE.updatePersonalSpendingFromDto(dto, expense);
+
         personalSpendingRepository.save(expense);
         return true;
     }
@@ -157,6 +150,7 @@ public class SpendingService {
                 .findAllBySpendingStateAndCompanyId(ESpendingState.APPROVED, user.getCompanyId(), pageable)
                 .map(PersonalSpendingMapper.INSTANCE::toPersonalSpendingSummaryDto);
     }
+
     // Reddedilmiş harcamalar (Yönetici) - Pageable
     public Page<PersonalSpendingSummaryDto> getRejectedExpensesForManager(String token, Pageable pageable) {
         User user = userService.getUserFromToken(token);
@@ -233,4 +227,58 @@ public class SpendingService {
         return dto.isApproved();
     }
 
+    public PersonalSpendingSummaryWithTotalResponseDto getMonthlySummary(String token, Integer year, Integer month) {
+        Long userId = userService.getUserFromToken(token).getId();
+
+        // Kullanıcının belirtilen ay ve yıl için onaylanmış harcamaları getir
+        List<PersonalSpending> spendings = personalSpendingRepository.findAllByUserIdAndSpendingState(userId, ESpendingState.APPROVED)
+                .stream()
+                .filter(ps -> ps.getSpendingDate().getYear() == year && ps.getSpendingDate().getMonthValue() == month)
+                .toList();
+
+        List<PersonalSpendingSummaryDto> summaries = spendings.stream()
+                .map(PersonalSpendingMapper.INSTANCE::toPersonalSpendingSummaryDto)
+                .collect(Collectors.toList());
+
+        Double totalAmount = spendings.stream()
+                .mapToDouble(PersonalSpending::getBillAmount)
+                .sum();
+
+        return new PersonalSpendingSummaryWithTotalResponseDto(summaries, totalAmount);
+    }
+
+    public PersonalSpendingSummaryWithTotalResponseDto getCompanyUserMonthlySummary(String token, Long userId, Integer year, Integer month) {
+        User manager = userService.getUserFromToken(token);
+
+        if (manager.getRole() != EUserRole.MANAGER) {
+            throw new HRAppException(ErrorType.USER_NOT_MANAGER);
+        }
+
+        Optional<User> user = userService.findUserById(userId);
+        if (user.isEmpty()) {
+            throw new HRAppException(ErrorType.USER_NOT_FOUND);
+        }
+
+        if (!Objects.equals(manager.getCompanyId(), user.get().getCompanyId())) {
+            throw new HRAppException(ErrorType.UNAUTHORIZED_OPERATION);
+        }
+
+
+        List<PersonalSpending> expenses = personalSpendingRepository.findAllByUserIdAndYearAndMonthAndSpendingState(
+                userId,
+                year,
+                month,
+                ESpendingState.APPROVED
+        );
+
+        List<PersonalSpendingSummaryDto> summaries = expenses.stream()
+                .map(PersonalSpendingMapper.INSTANCE::toPersonalSpendingSummaryDto)
+                .toList();
+
+        Double totalAmount = expenses.stream()
+                .mapToDouble(PersonalSpending::getBillAmount)
+                .sum();
+
+        return new PersonalSpendingSummaryWithTotalResponseDto(summaries, totalAmount);
+    }
 }

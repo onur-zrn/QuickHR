@@ -84,19 +84,21 @@ public class EndPoints {
 
 	// Expenses - Employee
 
-	public static final String EXPENSES = EMPLOYEE + "/expenses"; // GET /api/employee/expenses
-	public static final String EXPENSE_DETAIL = EMPLOYEE + "/expenses/{id}"; // GET /api/employee/expenses/{id}
-	public static final String CREATE_EXPENSE = EMPLOYEE + "/expenses"; // POST /api/employee/expenses
-	public static final String UPDATE_EXPENSE = EMPLOYEE + "/expenses/{id}"; // PUT /api/employee/expenses/{id} - Harcama güncelle
-	public static final String DELETE_EXPENSE = EMPLOYEE + "/expenses/{id}"; // DELETE /api/employee/expenses/{id} - Harcama sil (pending ise)
+	public static final String EXPENSES = "/expenses"; // GET /api/employee/expenses
+	public static final String EXPENSE_DETAIL = "/expenses/{id}"; // GET /api/employee/expenses/{id}
+	public static final String CREATE_EXPENSE = "/expenses"; // POST /api/employee/expenses
+	public static final String UPDATE_EXPENSE = "/expenses/{id}"; // PUT /api/employee/expenses/{id} - Harcama güncelle
+	public static final String DELETE_EXPENSE = "/expenses/{id}"; // DELETE /api/employee/expenses/{id} - Harcama sil (pending ise)
+	public static final String EXPENSES_MONTHLY_SUMMARY = "/expenses/monthly-summary"; // GET /api/employee/expenses/monthly-summary
+
 
 	// Expenses - Manager
-	public static final String PENDING_EXPENSES_MANAGER = COMPANY + "/expenses/pending"; // GET /api/company/expenses/pending - Onay bekleyen harcamalar
-	public static final String APPROVED_EXPENSES_MANAGER = COMPANY + "/expenses/approved"; // GET /api/company/expenses/approved - Onaylanmış harcamalar
-	public static final String REJECTED_EXPENSES_MANAGER = COMPANY + "/expenses/rejected"; // GET /api/company/expenses/rejected - Reddedilmiş harcamalar
-	public static final String EXPENSES_LIST_MANAGER = COMPANY + "/expenses"; // GET /api/company/expenses - Personel harcamalarını listele
-	public static final String EXPENSE_DETAILS_MANAGER = COMPANY + "/expenses/{id}"; // GET /api/company/expenses/{id} - Harcama detayları
-	public static final String APPROVE_REJECT_EXPENSE = COMPANY + "/expenses/approve-reject";
+	public static final String PENDING_EXPENSES_MANAGER = "/expenses/pending"; // GET /api/company/expenses/pending - Onay bekleyen harcamalar
+	public static final String APPROVED_EXPENSES_MANAGER = "/expenses/approved"; // GET /api/company/expenses/approved - Onaylanmış harcamalar
+	public static final String REJECTED_EXPENSES_MANAGER = "/expenses/rejected"; // GET /api/company/expenses/rejected - Reddedilmiş harcamalar
+	public static final String EXPENSES_LIST_MANAGER = "/expenses"; // GET /api/company/expenses - Personel harcamalarını listele
+	public static final String EXPENSE_DETAILS_MANAGER = "/expenses/{id}"; // GET /api/company/expenses/{id} - Harcama detayları
+	public static final String APPROVE_REJECT_EXPENSE = "/expenses/approve-reject"; // PUT /api/company//expenses/approve-reject - Harcama Kabul et yada Reddet
+	public static final String EXPENSES_USER_MONTHLY_SUMMARY = "/expenses/{userId}/monthly-summary";  // GET /api/company//expenses/{userId}/monthly-summary
 
-
-}
+ }

@@ -88,7 +88,7 @@ public class SpendingInitializer {
                 .billDocumentUrl(null)
                 .billAmount(350.00)
                 .spendingDate(LocalDate.of(2025, 6, 5))
-                .spendingState(ESpendingState.APPROVED)
+                .spendingState(ESpendingState.REJECTED)
                 .spendingType(ESpendingType.MEAL)
                 .build());
 
@@ -98,7 +98,7 @@ public class SpendingInitializer {
                 .billDocumentUrl(null)
                 .billAmount(75.00)
                 .spendingDate(LocalDate.of(2025, 6, 5))  // Aynı gün
-                .spendingState(ESpendingState.APPROVED)
+                .spendingState(ESpendingState.PENDING)
                 .spendingType(ESpendingType.MEAL)
                 .build());
 

@@ -2,6 +2,9 @@ package com.quickhr.repository;
 
 import com.quickhr.entity.PersonalSpending;
 import com.quickhr.enums.spendings.ESpendingState;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,5 +40,22 @@ public interface PersonalSpendingRepository extends JpaRepository<PersonalSpendi
     List<PersonalSpending> findAllBySpendingStateAndCompanyId(
             @Param("companyId") Long companyId,
             @Param("excludedState") ESpendingState excludedState
+    );
+
+    List<PersonalSpending> findAllByUserIdAndSpendingState(Long userId, ESpendingState spendingState);
+
+
+    @Query("""
+        SELECT ps FROM PersonalSpending ps 
+        WHERE ps.userId = :userId
+        AND EXTRACT(YEAR FROM ps.spendingDate) = :year
+        AND EXTRACT(MONTH FROM ps.spendingDate) = :month
+        AND ps.spendingState = :spendingState
+    """)
+    List<PersonalSpending> findAllByUserIdAndYearAndMonthAndSpendingState(
+            @Param("userId") Long userId,
+            @Param("year") Integer year,
+            @Param("month") Integer month,
+            @Param("spendingState") ESpendingState spendingState
     );
 }
