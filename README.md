@@ -1,6 +1,5 @@
 ## 💼 QuickHR
 
----
 
 ## 📌 Project Description
 
