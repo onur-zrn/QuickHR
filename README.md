@@ -11,11 +11,8 @@ It includes essential HR modules and enables the digital tracking and management
 It includes core HR modules and enables seamless:
 
 🔐 Authentication & Authorization
-
 👤 User Management
-
 🏢 Company Administration
-
 📊 Digital Tracking of Employee Activities  
 
 ## 🚀 Key Features
