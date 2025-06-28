@@ -33,6 +33,7 @@ public class EmployeeService {
     private final UserService userService;
     private final PublicHolidayService publicHolidayService;
     private final SpendingService spendingService;
+    private final EmbezzlementService embezzlementService;
     private final PermissionRepository permissionRepository;
 
     public Employee save(Employee employee) {
@@ -76,10 +77,13 @@ public class EmployeeService {
         PersonalSpendingSummaryWithTotalResponseDto spendingSummary =
                 spendingService.getMonthlySummary(token, LocalDate.now().getYear(),LocalDate.now().getMonthValue());
 
+        List<EmbezzlementProductDetailResponseDto> embezzlementProducts = embezzlementService.getMyEmbezzlements(token);
+
         return EmployeeDashboardResponseDto.of(
                 holidayDtos,
                 annualLeaveDetailsDto,
-                spendingSummary
+                spendingSummary,
+                embezzlementProducts
         );
     }
 

@@ -25,7 +25,18 @@ public class EmbezzlementDataInitializer {
                         .serialNumber("7783837")
                         .assignedDate(LocalDate.of(2024, 12, 1))
                         .build(),
-
+                    Embezzlement.builder()
+                            .name("Laptop")
+                            .description("Geliştiriciye zimmetlendi.")
+                            .companyId(1L)
+                            .userId(11L)
+                            .embezzlementType(EEmbezzlementType.ELECTRONIC_DEVICES)
+                            .embezzlementState(EEmbezzlementState.APPROVED)
+                            .brand("Apple")
+                            .model("Macbook Pro")
+                            .serialNumber("7783837")
+                            .assignedDate(LocalDate.of(2024, 12, 1))
+                            .build(),
                 Embezzlement.builder()
                         .name("Telefon")
                         .description("Bakım ekibine zimmetlendi.")
