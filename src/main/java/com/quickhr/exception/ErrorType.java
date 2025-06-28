@@ -94,6 +94,17 @@ public enum ErrorType {
 	MAIL_ALREADY_TAKEN(516, "Bu e-posta adresi zaten kullanımda!", HttpStatus.BAD_REQUEST),
 	MAIL_SAME(517, "Yeni e-posta adresi, mevcut adresinizle aynı! Lütfen farklı bir e-posta girin!", HttpStatus.BAD_REQUEST),
 
+	// EMBEZZLEMENT
+	EMBEZZLEMENT_NOT_FOUND(1, "Zimmet Kaydı Bulunamadı!", HttpStatus.NOT_FOUND),
+	EMBEZZLEMENT_ALREADY_ASSIGNED(2,"Zimmet zaten atanmış!", HttpStatus.BAD_REQUEST),
+	INVALID_STATE_CHANGE(3,"Geçersiz durum değişikliği!", HttpStatus.BAD_REQUEST),
+	NOTE_REQUIRED(4,"Not giriniz,ZORUNLU!", HttpStatus.BAD_REQUEST),
+	EMBEZZLEMENT_STATE_DOESNT_PENDING(5,"Ekipman pending de değil" ,HttpStatus.BAD_REQUEST ),
+	CANNOT_DELETE_APPROVED_EMBEZZLEMENT(6,"Onaylanmış silinemez.",HttpStatus.BAD_REQUEST ),
+	UNAUTHORIZED_NOT_MANAGER(7, "Bu işlemi yalnızca yöneticiler gerçekleştirebilir.", HttpStatus.FORBIDDEN),
+	UNAUTHORIZED_DIFFERENT_COMPANY(8, "Yönetici, çalışan ve zimmet aynı şirkete ait olmalıdır.", HttpStatus.FORBIDDEN),
+	UNAUTHORIZED_EMBEZZLEMENT_OWNER(9, "Sadece size ait zimmetleri onaylayabilir veya reddedebilirsiniz.", HttpStatus.FORBIDDEN),
+
 	// Comment
 	COMMENT_NOT_FOUND(2000, "Yorum bulunamadı" , HttpStatus.NOT_FOUND),
 	COMMENT_ALREADY_EXITS(2001 ,"Şirkete ait zaten yorum bulunmaktadır. Birden fazla yorum eklenemez.", HttpStatus.CONFLICT),

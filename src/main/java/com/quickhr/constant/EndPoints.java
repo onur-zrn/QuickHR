@@ -100,6 +100,23 @@ public class EndPoints {
 	public static final String EXPENSE_DETAILS_MANAGER = "/expenses/{id}"; // GET /api/company/expenses/{id} - Harcama detayları
 	public static final String APPROVE_REJECT_EXPENSE = "/expenses/approve-reject"; // PUT /api/company//expenses/approve-reject - Harcama Kabul et yada Reddet
 	public static final String EXPENSES_USER_MONTHLY_SUMMARY = "/expenses/{userId}/monthly-summary";  // GET /api/company//expenses/{userId}/monthly-summary
+
+	// Embezzlement
+	public static final String EMBEZZLEMENT_LIST = COMPANY +"/embezzlement-list";  // GET /api/company/assets
+	public static final String EMBEZZLEMENT_DETAILS = COMPANY +"/embezzlement-details/{embezzlementId}";  // GET /api/company/assets
+	public static final String ASSIGNED_EMBEZZLEMENT_LIST = COMPANY +"/assigned-embezzlement-list";  // GET /api/company/assets
+	public static final String REJECTED_EMBEZZLEMENT_LIST = COMPANY +"/rejected-embezzlement-list";  // GET /api/company/assets
+	public static final String UNASSIGNED_EMBEZZLEMENT_LIST = COMPANY +"/unassigned-embezzlement-list";  // GET /api/company/assets
+
+	public static final String CREATE_EMBEZZLEMENT = COMPANY+"/create-embezzlement";  //POST /api/company/assets
+	public static final String ASSIGN_EMBEZZLEMENT = COMPANY+ "/employee/assign-embezzlement"; // manager atıyor -> personal kabul ediyor
+	// personal istekte bulunacak -> manager kabul edecek veya reddedecek
+	public static final String CONFIRM_REJECT = EMPLOYEE+"/confirm-reject";     // manager atıyor -> personal kabul ediyor
+	// personal talep edecek -> manager kabul edecek
+	public static final String MY_EMBEZZLEMENT_LIST =EMPLOYEE+"/my-embezzlement-list";
+	public static final String UPDATE_EMBEZZLEMENT = COMPANY+"/employee/update-embezzlement/{embezzlementId}";
+	public static final String DELETE_EMBEZZLEMENT = COMPANY+"/employee/delete-embezzlement";
+
 	// Comment
 	public static final String COMMENT = "/comment"; // POST /api/company/comment, PUT /api/company/comment
 	public static final String DELETE_COMMENT = "/comment/{id}"; // DELETE /api/company/comment/{id}
@@ -111,5 +128,7 @@ public class EndPoints {
 	public static final String ADMIN_COMMENT_APPROVE_OR_REJECT = "/comment/{id}/approve-or-reject"; // PUT /api/admin/comment/{id}/approve-or-reject
 	public static final String ADMIN_PENDING_COMMENTS = "/pending-comments"; // GET /api/admin/pending-comments
 	public static final String ADMIN_ALL_COMMENTS = "/all-comments"; // GET /api/admin/all-comments
+
+
 
  }

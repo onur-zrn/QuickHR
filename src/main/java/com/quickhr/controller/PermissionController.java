@@ -5,7 +5,6 @@ import com.quickhr.dto.request.isApprovedRequestLeaveRequestDto;
 import com.quickhr.dto.response.AnnualLeaveDetailsDto;
 import com.quickhr.dto.response.BaseResponse;
 import com.quickhr.entity.Permission;
-import com.quickhr.service.EmployeeService;
 import com.quickhr.service.PermissionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ import static com.quickhr.constant.EndPoints.*;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class PermissionController {
-    private final EmployeeService employeeService;
+
     private final PermissionService permissionService;
 
     //İzin bakiyesi ve yıllık izin durumu
@@ -80,7 +79,7 @@ public class PermissionController {
 
 
     @GetMapping(REQUEST_LEAVE)
-    public ResponseEntity<BaseResponse<List<Permission>>> requestLeave(@RequestParam String token) {
+    public ResponseEntity<BaseResponse<List<Permission>>> requestLeave(@RequestHeader String token) {
         return ResponseEntity.ok(BaseResponse.<List<Permission>>builder()
                 .code(200)
                 .data(permissionService.pendingLeave(token))
@@ -90,7 +89,7 @@ public class PermissionController {
     }
 
     @GetMapping(APPROVED_LEAVE)
-    public ResponseEntity<BaseResponse<List<Permission>>> approvedLeave(@RequestParam String token) {
+    public ResponseEntity<BaseResponse<List<Permission>>> approvedLeave(@RequestHeader String token) {
         return ResponseEntity.ok(BaseResponse.<List<Permission>>builder()
                 .code(200)
                 .data(permissionService.approvedLeave(token))
@@ -100,7 +99,7 @@ public class PermissionController {
     }
 
     @PutMapping(IS_APPROVED_REQUEST_LEAVE)
-    public ResponseEntity<BaseResponse<Boolean>> isApprovedRequestLeave (@RequestParam String token,
+    public ResponseEntity<BaseResponse<Boolean>> isApprovedRequestLeave (@RequestHeader String token,
                                                                          isApprovedRequestLeaveRequestDto dto) {
         Boolean result = permissionService.isApprovedRequestLeave(token, dto);
         String message;
