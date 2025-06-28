@@ -14,7 +14,7 @@ public class DataInitializer {
 	private final EmployeeRepository employeeRepository;
 	private final PermissionRepository permissionRepository;
 	private final PublicHolidaysRepository publicHolidaysRepository;
-
+	private final CommentRepository commentRepository;
 	private final PersonalSpendingRepository personalSpendingRepository;
 
 	@PostConstruct
@@ -47,6 +47,9 @@ public class DataInitializer {
 			personalSpendingRepository.saveAll(SpendingInitializer.spendingInitializer());
 		}
 
+		if (commentRepository.count() == 0) {
+			commentRepository.saveAll(CommentInitializer.commentInitializer());
+		}
 		System.out.println("✅ DataInitializer data has been loaded successfully!");
 	}
 }

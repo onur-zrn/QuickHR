@@ -92,8 +92,12 @@ public enum ErrorType {
 	INVALID_REFRESH_TOKEN(514, "Geçersiz yenileme (refresh) token!", HttpStatus.BAD_REQUEST),
 	EXPIRED_REFRESH_TOKEN(515, "Yenileme (refresh) token süresi dolmuş!", HttpStatus.BAD_REQUEST),
 	MAIL_ALREADY_TAKEN(516, "Bu e-posta adresi zaten kullanımda!", HttpStatus.BAD_REQUEST),
-	MAIL_SAME(517, "Yeni e-posta adresi, mevcut adresinizle aynı! Lütfen farklı bir e-posta girin!", HttpStatus.BAD_REQUEST)
+	MAIL_SAME(517, "Yeni e-posta adresi, mevcut adresinizle aynı! Lütfen farklı bir e-posta girin!", HttpStatus.BAD_REQUEST),
 
+	// Comment
+	COMMENT_NOT_FOUND(2000, "Yorum bulunamadı" , HttpStatus.NOT_FOUND),
+	COMMENT_ALREADY_EXITS(2001 ,"Şirkete ait zaten yorum bulunmaktadır. Birden fazla yorum eklenemez.", HttpStatus.CONFLICT),
+	INVALID_COMMENT_STATUS(2002,"Yorum gönderimde değil.", HttpStatus.BAD_REQUEST )
 
 
 

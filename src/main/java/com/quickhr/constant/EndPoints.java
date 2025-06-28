@@ -100,5 +100,16 @@ public class EndPoints {
 	public static final String EXPENSE_DETAILS_MANAGER = "/expenses/{id}"; // GET /api/company/expenses/{id} - Harcama detayları
 	public static final String APPROVE_REJECT_EXPENSE = "/expenses/approve-reject"; // PUT /api/company//expenses/approve-reject - Harcama Kabul et yada Reddet
 	public static final String EXPENSES_USER_MONTHLY_SUMMARY = "/expenses/{userId}/monthly-summary";  // GET /api/company//expenses/{userId}/monthly-summary
+	// Comment
+	public static final String COMMENT = "/comment"; // POST /api/company/comment, PUT /api/company/comment
+	public static final String DELETE_COMMENT = "/comment/{id}"; // DELETE /api/company/comment/{id}
+
+	// Public Comments
+	public static final String PUBLIC_COMMENTS = "/comments"; // GET /api/public-api/comments
+
+	// Admin Comment Actions
+	public static final String ADMIN_COMMENT_APPROVE_OR_REJECT = "/comment/{id}/approve-or-reject"; // PUT /api/admin/comment/{id}/approve-or-reject
+	public static final String ADMIN_PENDING_COMMENTS = "/pending-comments"; // GET /api/admin/pending-comments
+	public static final String ADMIN_ALL_COMMENTS = "/all-comments"; // GET /api/admin/all-comments
 
  }
