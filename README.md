@@ -32,5 +32,5 @@ It includes essential HR modules and enables the digital tracking and management
 
 - **Mehmet Ali HAYTA**
 - **Onur ZEREN**
-- **Tuğberk Özoğlu**
+- **Tuğberk ÖZOĞLU**
 - **Yunus ERASLAN**
