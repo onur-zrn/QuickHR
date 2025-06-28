@@ -31,7 +31,14 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 """)
     Long countActivePersonalByCompanyId(@Param("companyId") Long companyId);
 
-    @Query("SELECT COUNT(p) FROM Permission p WHERE CURRENT_DATE BETWEEN p.beginDate AND p.endDate AND p.permissionState = com.quickhr.enums.permissions.EPermissionState.APPROVED")
-    Long countApprovedPermissionsToday();
+    @Query("""
+    SELECT COUNT(DISTINCT e.id)
+    FROM Employee e
+    JOIN Permission p ON e.userId = p.userId
+    WHERE e.companyId = :companyId
+      AND p.permissionState = com.quickhr.enums.permissions.EPermissionState.APPROVED
+      AND CURRENT_DATE BETWEEN p.beginDate AND p.endDate
+""")
+    Long countApprovedPermissionsTodayByCompanyId(@Param("companyId") Long companyId);
 
 }

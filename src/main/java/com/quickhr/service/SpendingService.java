@@ -2,7 +2,6 @@ package com.quickhr.service;
 
 import com.quickhr.dto.request.CreatePersonalSpendingRequestDto;
 import com.quickhr.dto.request.ExpenseApproveRejectRequestDto;
-import com.quickhr.dto.request.GetMonthlySummaryRequestDto;
 import com.quickhr.dto.request.UpdatePersonalSpendingRequestDto;
 import com.quickhr.dto.response.PersonalSpendingDetailResponseDto;
 import com.quickhr.dto.response.PersonalSpendingSummaryDto;
@@ -16,15 +15,10 @@ import com.quickhr.exception.HRAppException;
 import com.quickhr.mapper.PersonalSpendingMapper;
 import com.quickhr.repository.PersonalSpendingRepository;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -43,11 +37,11 @@ public class SpendingService {
         return personalSpendingRepository.findById(id);
     }
 
-    public List<PersonalSpendingSummaryDto> getAllExpensesSummaryforPersonal(String token) {
+    public List<PersonalSpendingSummaryDto> getAllExpensesSummaryforPersonal(String token, Pageable pageable) {
         User user = userService.getUserFromToken(token);
 
         return personalSpendingRepository
-                .findAllByUserIdAndSpendingStateNot(user.getId(), ESpendingState.REJECTED)
+                .findAllByUserIdAndSpendingStateNot(user.getId(), ESpendingState.REJECTED, pageable)
                 .stream()
                 .map(PersonalSpendingMapper.INSTANCE::toPersonalSpendingSummaryDto)   // Mapper ile dönüşüm
                 .toList();
@@ -164,7 +158,7 @@ public class SpendingService {
                 .map(PersonalSpendingMapper.INSTANCE::toPersonalSpendingSummaryDto);
     }
 
-    public List<PersonalSpendingSummaryDto> getAllExpensesForManager(String token) {
+    public Page<PersonalSpendingSummaryDto> getAllExpensesForManager(String token, Pageable pageable) {
         User user = userService.getUserFromToken(token);
 
         if (user.getRole() != EUserRole.MANAGER) {
@@ -172,10 +166,8 @@ public class SpendingService {
         }
 
         return personalSpendingRepository
-                .findAllBySpendingStateAndCompanyId(user.getCompanyId(), ESpendingState.REJECTED) // REJECTED hariç listelemek
-                .stream()
-                .map(PersonalSpendingMapper.INSTANCE::toPersonalSpendingSummaryDto)
-                .toList();
+                .findAllBySpendingStateAndCompanyId(user.getCompanyId(), ESpendingState.REJECTED, pageable) // REJECTED hariç listelemek
+                .map(PersonalSpendingMapper.INSTANCE::toPersonalSpendingSummaryDto);
     }
 
     public PersonalSpendingDetailResponseDto getExpenseDetailForManager(String token, Long id) {

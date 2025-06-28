@@ -73,12 +73,12 @@ public class SpendingControllerManager {
 
 	//Tüm harcamalar reddedilenler hariç
 	@GetMapping(EXPENSES_LIST_MANAGER)
-	public ResponseEntity<BaseResponse<List<PersonalSpendingSummaryDto>>> getAllExpensesForManager(
-			@RequestHeader String token) {
+	public ResponseEntity<BaseResponse<Page<PersonalSpendingSummaryDto>>> getAllExpensesForManager(
+			@RequestHeader String token, Pageable pageable) {
 
-		List<PersonalSpendingSummaryDto> expenses = spendingService.getAllExpensesForManager(token);
+		Page<PersonalSpendingSummaryDto> expenses = spendingService.getAllExpensesForManager(token, pageable);
 
-		return ResponseEntity.ok(BaseResponse.<List<PersonalSpendingSummaryDto>>builder()
+		return ResponseEntity.ok(BaseResponse.<Page<PersonalSpendingSummaryDto>>builder()
 				.message("Personel harcamaları listelendi (Reddedilenler hariç).")
 				.code(200)
 				.success(true)

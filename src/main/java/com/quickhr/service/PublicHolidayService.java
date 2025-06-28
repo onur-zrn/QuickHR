@@ -15,22 +15,13 @@ public class PublicHolidayService {
 
     private final PublicHolidaysRepository publicHolidaysRepository;
     private final UserService userService;
-    private final EmployeeService employeeService;
 
-    public CompanyDashboardResponseDto getCompanyDashboard(String token) {
-        User userFromToken = userService.getUserFromToken(token);
-        List<PublicHolidayResponseDto> holidayDtos = publicHolidaysRepository.findAll().stream()
+    public List<PublicHolidayResponseDto> findAll() {
+        return publicHolidaysRepository.findAll().stream()
                 .map(PublicHolidayResponseDto::fromEntity)
                 .toList();
-
-        Long companyId = userFromToken.getCompanyId();
-        return  CompanyDashboardResponseDto.of(
-                "Company Dashboard",
-                employeeService.countActivePersonalByCompanyId(companyId),
-                employeeService.countApprovedPermissionsToday(),
-                holidayDtos
-
-        );
     }
+
+
 
 }

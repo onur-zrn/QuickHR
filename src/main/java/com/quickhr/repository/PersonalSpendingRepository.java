@@ -2,9 +2,7 @@ package com.quickhr.repository;
 
 import com.quickhr.entity.PersonalSpending;
 import com.quickhr.enums.spendings.ESpendingState;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +13,7 @@ import java.util.List;
 
 public interface PersonalSpendingRepository extends JpaRepository<PersonalSpending, Long> {
 
-    List<PersonalSpending> findAllByUserIdAndSpendingStateNot(Long userId, ESpendingState spendingState);
+    List<PersonalSpending> findAllByUserIdAndSpendingStateNot(Long userId, ESpendingState spendingState, Pageable pageable);
 
     // Şirket bazlı, duruma göre harcamaları getir (PENDING, APPROVED, REJECTED gibi)
     @Query("""
@@ -37,9 +35,10 @@ public interface PersonalSpendingRepository extends JpaRepository<PersonalSpendi
     WHERE u.companyId = :companyId 
       AND ps.spendingState <> :excludedState
 """)
-    List<PersonalSpending> findAllBySpendingStateAndCompanyId(
+    Page<PersonalSpending> findAllBySpendingStateAndCompanyId(
             @Param("companyId") Long companyId,
-            @Param("excludedState") ESpendingState excludedState
+            @Param("excludedState") ESpendingState excludedState,
+            Pageable pageable
     );
 
     List<PersonalSpending> findAllByUserIdAndSpendingState(Long userId, ESpendingState spendingState);

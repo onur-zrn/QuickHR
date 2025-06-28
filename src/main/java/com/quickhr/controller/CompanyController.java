@@ -33,10 +33,10 @@ public class CompanyController {
     @GetMapping(COMPANY_DASHBOARD)
     public ResponseEntity<BaseResponse<CompanyDashboardResponseDto>> getCompanyDashboard(@RequestHeader String token) {
 
+//        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String id = userDetails.getUsername();
+//        System.out.println(id);
 
-       UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String id = userDetails.getUsername();
-        System.out.println(id);
         CompanyDashboardResponseDto dashboard = companyService.getCompanyDashboard(String.valueOf(token));
         return ResponseEntity.ok(BaseResponse.<CompanyDashboardResponseDto>builder()
                 .code(200)

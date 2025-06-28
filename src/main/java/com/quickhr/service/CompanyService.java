@@ -1,10 +1,7 @@
 package com.quickhr.service;
 
 import com.quickhr.dto.request.EmployeeRequestDto;
-import com.quickhr.dto.response.CompanyDashboardResponseDto;
-import com.quickhr.dto.response.EmployeeDetailsResponseDto;
-import com.quickhr.dto.response.EmployeeResponseDto;
-import com.quickhr.dto.response.PersonalStateResponseDto;
+import com.quickhr.dto.response.*;
 import com.quickhr.entity.*;
 import com.quickhr.enums.user.EUserRole;
 import com.quickhr.enums.user.EUserState;
@@ -37,7 +34,6 @@ public class CompanyService {
 		return companyRepository.save(company);
 	}
 
-
 	public List<Company> findAllCompany() {
 		return companyRepository.findAll();
 	}
@@ -62,6 +58,27 @@ public class CompanyService {
 		return companyRepository.findById(id);
 	}
 
+	public CompanyDashboardResponseDto getCompanyDashboard(String token) {
+		User userFromToken = userService.getUserFromToken(token);
+		List<PublicHolidayResponseDto> holidayDtos = publicHolidayService.findAll();
+
+		Long companyId = userFromToken.getCompanyId();
+		Optional<Company> optionalCompany = getCompanyById(companyId);
+		String company_name = "COMPANY DASHBOARD";
+		if (optionalCompany.isEmpty()) {
+			throw new HRAppException(ErrorType.COMPANY_NOT_FOUND);
+		}else
+			company_name = optionalCompany.get().getName();
+
+		return  CompanyDashboardResponseDto.of(
+				company_name,
+				employeeService.countActivePersonalByCompanyId(companyId),
+				employeeService.countApprovedPermissionsToday(companyId),
+				holidayDtos
+
+		);
+	}
+
 	public Company createCompany(String companyName) {
 		Optional<Company> companyOptional = getCompanyByName(companyName);
 		if (companyOptional.isPresent()) {
@@ -78,9 +95,6 @@ public class CompanyService {
 		return company;
 	}
 
-	public CompanyDashboardResponseDto getCompanyDashboard(String token) {
-		return publicHolidayService.getCompanyDashboard(token);
-	}
 
 	public List<Company> findAllByCompanyState(ECompanyState state) {
 		return companyRepository.findAllByCompanyState(state);

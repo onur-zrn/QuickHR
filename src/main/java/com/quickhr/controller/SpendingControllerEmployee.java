@@ -9,6 +9,7 @@ import com.quickhr.dto.response.PersonalSpendingSummaryWithTotalResponseDto;
 import com.quickhr.service.SpendingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +29,9 @@ public class SpendingControllerEmployee {
 
 	@GetMapping(EXPENSES)
 	public ResponseEntity<BaseResponse<List<PersonalSpendingSummaryDto>>> getAllExpenses(
-			@RequestHeader String token) {
+			@RequestHeader String token, Pageable pageable) {
 
-		List<PersonalSpendingSummaryDto> expenses = spendingService.getAllExpensesSummaryforPersonal(token);
+		List<PersonalSpendingSummaryDto> expenses = spendingService.getAllExpensesSummaryforPersonal(token, pageable);
 
 		return ResponseEntity.ok(BaseResponse.<List<PersonalSpendingSummaryDto>>builder()
 				.message("Harcamalar listelendi")

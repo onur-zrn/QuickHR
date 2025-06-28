@@ -57,8 +57,16 @@ public class EmployeeInitializer {
             String phone = employeeCounter <= 10 ? "0500111" + String.format("%04d", companyId) : "0500" + String.format("%07d", employeeCounter * 222);
             String identityNumber = "ID" + String.format("%09d", employeeCounter);
             String address = employeeCounter <= 10 ? "Company Address " + companyId : "Address " + employeeCounter;
-            EUserState userState = EUserState.values()[random.nextInt(EUserState.values().length)];
 
+            // Durumlar: 5'e tam bölünen denied, 3'e tam bölünen pending, diğerleri active
+            EUserState state;
+            if (employeeCounter % 5 == 0) {
+                state = EUserState.DENIED;
+            } else if (employeeCounter % 3 == 0) {
+                state = EUserState.PENDING;
+            } else {
+                state = EUserState.ACTIVE;
+            }
             employees.add(Employee.builder()
                     .userId((long) employeeCounter)
                     .companyId(companyId)
@@ -78,7 +86,7 @@ public class EmployeeInitializer {
                     .dateOfTermination(null)
                     .salary(salary)
                     //.employmentStatus(employmentStatus)
-                    .userState(userState)
+                    .userState(state)
                     .build());
 
             employeeCounter++;

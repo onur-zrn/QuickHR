@@ -4,7 +4,11 @@ import com.quickhr.dto.request.EmployeeUpdateProfileRequestDto;
 import com.quickhr.dto.request.EmployeeUpdateRequestDto;
 import com.quickhr.dto.response.*;
 import com.quickhr.entity.Employee;
+import com.quickhr.entity.Permission;
 import com.quickhr.entity.User;
+import com.quickhr.enums.permissions.EPermissionPolicy;
+import com.quickhr.enums.permissions.EPermissionState;
+import com.quickhr.enums.permissions.EPermissionType;
 import com.quickhr.enums.user.EUserRole;
 import com.quickhr.enums.user.EUserState;
 import com.quickhr.exception.ErrorType;
@@ -12,9 +16,12 @@ import com.quickhr.exception.HRAppException;
 import com.quickhr.mapper.EmployeeMapper;
 import com.quickhr.mapper.UserMapper;
 import com.quickhr.repository.EmployeeRepository;
+import com.quickhr.repository.PermissionRepository;
 import jakarta.transaction.Transactional;
 import lombok.*;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,9 +29,11 @@ import org.springframework.data.domain.Pageable;
 @Service
 @RequiredArgsConstructor
 public class EmployeeService {
-    private final UserService userService;
-
     private final EmployeeRepository employeeRepository;
+    private final UserService userService;
+    private final PublicHolidayService publicHolidayService;
+    private final SpendingService spendingService;
+    private final PermissionRepository permissionRepository;
 
     public Employee save(Employee employee) {
         return employeeRepository.save(employee);
@@ -42,8 +51,8 @@ public class EmployeeService {
         return employeeRepository.countActivePersonalByCompanyId(companyId);
     }
 
-    public Long countApprovedPermissionsToday() {
-        return employeeRepository.countApprovedPermissionsToday();
+    public Long countApprovedPermissionsToday(Long company_id) {
+        return employeeRepository.countApprovedPermissionsTodayByCompanyId(company_id);
     }
 
 
@@ -52,25 +61,51 @@ public class EmployeeService {
     }
 
     public EmployeeDashboardResponseDto getEmployeeDashboard(String token) {
-        userService.getUserFromToken(token);
-        return new EmployeeDashboardResponseDto(
-                "Employee Dashboard",
-                List.of(
-                        "Summer Break (Jul 15-20)",
-                        "Company Anniversary (Sep 10)"
-                ),
-                12,
-                List.of(
-                        "Office party this Friday",
-                        "New training program available"
-                ),
-                List.of(
-                        "Complete quarterly self-assessment",
-                        "Submit timesheet by Friday"
-                )
+        Long userId = userService.getUserFromToken(token).getId();
+
+        // Public Holidays
+        List<PublicHolidayResponseDto> holidayDtos = publicHolidayService.findAll();
+
+        Employee employee = getEmployeeByUserId(userId)
+                .orElseThrow(() -> new HRAppException(ErrorType.EMPLOYEE_NOT_FOUND));
+
+        // Annual Leave Details
+        AnnualLeaveDetailsDto annualLeaveDetailsDto = getAnnualLeaveDetailsDto(employee);
+
+        // Monthly Spending Summary
+        PersonalSpendingSummaryWithTotalResponseDto spendingSummary =
+                spendingService.getMonthlySummary(token, LocalDate.now().getYear(),LocalDate.now().getMonthValue());
+
+        return EmployeeDashboardResponseDto.of(
+                holidayDtos,
+                annualLeaveDetailsDto,
+                spendingSummary
         );
     }
 
+    private AnnualLeaveDetailsDto getAnnualLeaveDetailsDto(Employee employee) {
+        int totalLeaves = EPermissionPolicy.getAnnualLeaveDays(employee.getDateOfEmployment());
+
+        // Bu yılın başı ve sonu
+        LocalDate startOfYear = LocalDate.now().withDayOfYear(1);
+        LocalDate endOfYear = LocalDate.now().withMonth(12).withDayOfMonth(31);
+
+        List<Permission> usedLeaves = permissionRepository.findAllByUserIdAndPermissionTypeAndPermissionStateAndBeginDateBetween(
+                employee.getUserId(),
+                EPermissionType.ANNUAL_LEAVE,
+                EPermissionState.APPROVED,
+                startOfYear,
+                endOfYear
+        );
+
+        // Gün toplamı
+        int used_leaves =  usedLeaves.stream()
+                .mapToInt(p -> (int) (p.getEndDate().toEpochDay() - p.getBeginDate().toEpochDay() + 1)) // her iki gün dahil
+                .sum();
+        int remainingLeaves = totalLeaves - used_leaves;
+
+        return new AnnualLeaveDetailsDto(totalLeaves, used_leaves, remainingLeaves);
+    }
     public Page<EmployeeResponseDto> getEmployeeInCompany(List<Long> userIds, Pageable pageable) {
         Page<Employee> employees = employeeRepository.findByUserIdIn(userIds, pageable);
         return employees.map(EmployeeMapper.INSTANCE::toDto);
