@@ -30,7 +30,7 @@ public class SecurityConfig {
                             .permitAll()
                               .requestMatchers(ADMIN + "/**").hasAnyAuthority(EAdminRole.ADMIN.toString(), EAdminRole.SUPER_ADMIN.toString())
                               .requestMatchers(COMPANY + "/**").hasAuthority(EUserRole.MANAGER.toString())
-                              .requestMatchers(EMPLOYEE + "/**").hasAuthority(EUserRole.PERSONAL.toString())
+                              .requestMatchers(EMPLOYEE + "/**").hasAnyAuthority(EUserRole.MANAGER.toString(),EUserRole.PERSONAL.toString())
                               .requestMatchers(USER + "/**").hasAnyAuthority(EUserRole.MANAGER.toString(),EUserRole.PERSONAL.toString())
                             .anyRequest().permitAll();
                 });
