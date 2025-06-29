@@ -129,6 +129,18 @@ public class EndPoints {
 	public static final String ADMIN_PENDING_COMMENTS = "/pending-comments"; // GET /api/admin/pending-comments
 	public static final String ADMIN_ALL_COMMENTS = "/all-comments"; // GET /api/admin/all-comments
 
+	// Shift
+	public static final String CREATE_SHIFT = COMPANY + "/create-shift"; // POST /api/company/create-shift
+	public static final String ALL_SHIFTS = COMPANY + "/all-shifts"; // GET /api/company/all-shifts
+	public static final String SHIFT_DETAILS = COMPANY +"/{shiftId}/shift-details"; // GET /api/company/{shiftId}/shift-details
+	public static final String UPDATE_SHIFT = COMPANY + "/{shiftId}/update-shift"; // PUT /api/company/{shiftId}/update-shift
+	public static final String DELETE_SHIFT = COMPANY + "/{shiftId}/delete-shift"; // DELETE /api/company/{shiftId}/delete-shift
+	public static final String ASSIGN_SHIFT = COMPANY + "/employee/{userId}/assign-shift"; // POST /api/company/employee/{userId}/assign-shift
+	public static final String ASSIGN_DELETE_SHIFT = COMPANY + "/employee/{userId}/assign-delete-shift/{shiftId}"; // DELETE /api/company/employee/{userId}/assign-delete-shift/{shiftId}
+	public static final String PERSONAL_SHIFT = COMPANY + "/employee/{userId}/personal-shift"; // GET /api/company/employee/{userId}/personal-shift
+	public static final String MY_SHIFT =  EMPLOYEE + "/my-shift"; // GET /api/employee/my-shift
+	public static final String ALL_ASSIGNED_SHIFTS = COMPANY + "/all-assigned-shifts"; // GET /api/company/all-assigned-shifts
+
 
 
  }

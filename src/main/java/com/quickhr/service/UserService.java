@@ -58,6 +58,9 @@ public class UserService {
 	public User findById(Long aLong) {
 		return userRepository.findById(aLong).orElseThrow(() -> new HRAppException(ErrorType.USER_NOT_FOUND));
 	}
+	public Optional<User> getUserById(Long id) {
+		return userRepository.findById(id);
+	}
 
 	@Transactional
 	public UserProfileResponseDTO getProfile(String token) {

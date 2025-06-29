@@ -17,6 +17,7 @@ public class DataInitializer {
 	private final CommentRepository commentRepository;
 	private final PersonalSpendingRepository personalSpendingRepository;
 	private final EmbezzlementRepository embezzlementRepository;
+	private final ShiftRepository shiftRepository;
 
 	@PostConstruct
 	public void init() {
@@ -54,6 +55,10 @@ public class DataInitializer {
 
 		if (embezzlementRepository.count() == 0) {
 			embezzlementRepository.saveAll(EmbezzlementDataInitializer.embezzlementInitializer());
+		}
+
+		if (shiftRepository.count() == 0) {
+			shiftRepository.saveAll(ShiftInitializer.shiftInitializer());
 		}
 		System.out.println("✅ DataInitializer data has been loaded successfully!");
 	}

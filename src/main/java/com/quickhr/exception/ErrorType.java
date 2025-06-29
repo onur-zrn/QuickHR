@@ -105,6 +105,20 @@ public enum ErrorType {
 	UNAUTHORIZED_DIFFERENT_COMPANY(8, "Yönetici, çalışan ve zimmet aynı şirkete ait olmalıdır.", HttpStatus.FORBIDDEN),
 	UNAUTHORIZED_EMBEZZLEMENT_OWNER(9, "Sadece size ait zimmetleri onaylayabilir veya reddedebilirsiniz.", HttpStatus.FORBIDDEN),
 
+	// Shift
+	USER_DOESNT_ACTIVE(1001, "Kullanıcı aktif değildir!", HttpStatus.UNPROCESSABLE_ENTITY),
+	SHIFT_NOT_FOUND(1002, "Vardiya bulunamadı!", HttpStatus.NOT_FOUND),
+	SHIFT_NOT_ASSIGNED_TO_THIS_USER(1003, "Vardiyada kullanıcı mevcut değildir!", HttpStatus.CONFLICT),
+	SHIFT_DOESNT_ASSIGNED_TO_USER(1004, "Kullanıcıya vardiya atanmamış!", HttpStatus.CONFLICT),
+	SHIFT_ALREADY_ASSIGNED_TO_USER(1005, "Bu kullanıcıya daha önce vardiya atanmış!", HttpStatus.CONFLICT),
+	USER_NOT_PERSONAL(1006, "Kullanıcı 'PERSONAL' değildir!", HttpStatus.UNPROCESSABLE_ENTITY ),
+	TIME_ZONE_DOES_SAME(1007, "Başlangıç ve bitiş saati aynı olamaz!", HttpStatus.BAD_REQUEST),
+	END_HOUR_BEFORE_BEGIN_HOUR(1008, "Bitiş saati başlangıç saatinden sonra olmalıdır!", HttpStatus.BAD_REQUEST),
+	SHIFT_ALREADY_ASSIGNED(1009, "Vardiyada tanımlı personel var o yüzden silinemez!", HttpStatus.BAD_REQUEST),
+	SHIFT_CAPACITY_FULL(1010, "Kapasitesi doldu! Ya kapasitesini güncelle yada yeni bir vardiya açman gerekiyor!", HttpStatus.BAD_REQUEST),
+	INVALID_CAPACITY(1011, "Geçersiz kapasite değeri girildi!", HttpStatus.BAD_REQUEST),
+	USER_ALREADY_ASSIGNED_SHIFT(1012, "Kullanıcı zaten bu vardiyaya atanmış!", HttpStatus.CONFLICT),
+
 	// Comment
 	COMMENT_NOT_FOUND(2000, "Yorum bulunamadı" , HttpStatus.NOT_FOUND),
 	COMMENT_ALREADY_EXITS(2001 ,"Şirkete ait zaten yorum bulunmaktadır. Birden fazla yorum eklenemez.", HttpStatus.CONFLICT),
