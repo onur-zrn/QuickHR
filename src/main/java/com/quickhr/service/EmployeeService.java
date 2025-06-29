@@ -5,6 +5,7 @@ import com.quickhr.dto.request.EmployeeUpdateRequestDto;
 import com.quickhr.dto.response.*;
 import com.quickhr.entity.Employee;
 import com.quickhr.entity.Permission;
+import com.quickhr.entity.Shift;
 import com.quickhr.entity.User;
 import com.quickhr.enums.permissions.EPermissionPolicy;
 import com.quickhr.enums.permissions.EPermissionState;
@@ -14,6 +15,7 @@ import com.quickhr.enums.user.EUserState;
 import com.quickhr.exception.ErrorType;
 import com.quickhr.exception.HRAppException;
 import com.quickhr.mapper.EmployeeMapper;
+import com.quickhr.mapper.ShiftMapper;
 import com.quickhr.mapper.UserMapper;
 import com.quickhr.repository.EmployeeRepository;
 import com.quickhr.repository.PermissionRepository;
@@ -34,6 +36,7 @@ public class EmployeeService {
     private final PublicHolidayService publicHolidayService;
     private final SpendingService spendingService;
     private final EmbezzlementService embezzlementService;
+    private final ShiftService shiftService;
     private final PermissionRepository permissionRepository;
 
     public Employee save(Employee employee) {
@@ -79,11 +82,13 @@ public class EmployeeService {
 
         List<EmbezzlementProductDetailResponseDto> embezzlementProducts = embezzlementService.getMyEmbezzlements(token);
 
+        MyShiftResponseDto myShift = shiftService.getMyShift(token);
         return EmployeeDashboardResponseDto.of(
                 holidayDtos,
                 annualLeaveDetailsDto,
                 spendingSummary,
-                embezzlementProducts
+                embezzlementProducts,
+                myShift
         );
     }
 

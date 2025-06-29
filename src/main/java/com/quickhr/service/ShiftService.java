@@ -17,7 +17,7 @@ import java.util.*;
 public class ShiftService {
     private final ShiftRepository shiftRepository;
     private final UserService userService;
-    private final CompanyService companyService;
+    private final CompanyRepository companyRepository;
 
     public Boolean createShift(String token, CreateShiftRequestDto dto) {
         User userValid = validateUserAndCompanyState(token);
@@ -250,7 +250,7 @@ public class ShiftService {
         Optional<User> userById = userService.getUserById(userId);
 
         Long companyId = userFromToken.getCompanyId();
-        Optional<Company> companyById = companyService.getCompanyById(companyId);
+        Optional<Company> companyById = companyRepository.findById(companyId);
 
         // Şirket aktif mi?
         companyById.filter(c -> c.getCompanyState().equals(ECompanyState.ACCEPTED))
