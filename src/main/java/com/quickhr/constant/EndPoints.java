@@ -58,20 +58,18 @@ public class EndPoints {
 	public static final String MAKE_PERSONAL_STATUS_IN_ACTIVE = "/employee/{id}/active"; // PUT /api/company/employee/{id}/active
 	public static final String MAKE_PERSONAL_STATUS_IN_PASSIVE = "/employee/{id}/passive"; // PUT /api/company/employee/{id}/passive
 	public static final String CHANGE_PERSONAL_STATUS = "/employee/{id}/change-personal-status"; // PUT /api/company/employee/{id}/change-personal-status
-
-	// Employee (EMPLOYEE_DASHBOARD -> izinler bittiğinde güncellenecek)
-	public static final String EMPLOYEE_DASHBOARD = "/dashboard"; // api/employee/dashboard
-	public static final String UPDATE_PERSONAL_PROFILE = "/update"; // PUT api/company/update
-
+	
 	// User
 	public static final String USER_PROFILE = "/profile"; // GET /api/users/profile, PUT /api/users/profile
 	public static final String USER_CHANGE_EMAIL = "/change-email"; // PUT /api/users/change-email
 	public static final String USER_VERIFY_EMAIL = "/verify-email"; // PUT /api/users/change-email
 	public static final String USER_CHANGE_PASSWORD = "/change-password"; // PUT /api/users/change-password
 	public static final String USER_DEACTIVATE = "/deactivate"; // PUT /api/users/deactivate
-
-	//Permissions
-
+	// Employee -> usera geçince bu sattırı sil
+	public static final String EMPLOYEE_DASHBOARD = "/dashboard"; // api/employee/dashboard
+	public static final String UPDATE_PERSONAL_PROFILE = "/update"; // PUT api/company/update
+	
+	// Permission
 	public static final String REQUEST_LEAVE = COMPANY +  "/request-leave"; // GET /api/company/request-leave
 	public static final String APPROVED_LEAVE = COMPANY + "/approved-leave"; // GET /api/company/request-leave
 	public static final String IS_APPROVED_REQUEST_LEAVE = COMPANY + "/leave/{id}/approved-request-leave"; // PUT /api/company/leave/{id}/approve
@@ -83,48 +81,43 @@ public class EndPoints {
 	public static final String ANNUAL_LEAVE_DETAILS = EMPLOYEE + "/annual-leave-details"; // GET /api/employee/annual-leave-details
 
 	// Expenses - Employee
-
 	public static final String EXPENSES = "/expenses"; // GET /api/employee/expenses
 	public static final String EXPENSE_DETAIL = "/expenses/{id}"; // GET /api/employee/expenses/{id}
 	public static final String CREATE_EXPENSE = "/expenses"; // POST /api/employee/expenses
-	public static final String UPDATE_EXPENSE = "/expenses/{id}"; // PUT /api/employee/expenses/{id} - Harcama güncelle
-	public static final String DELETE_EXPENSE = "/expenses/{id}"; // DELETE /api/employee/expenses/{id} - Harcama sil (pending ise)
+	public static final String UPDATE_EXPENSE = "/expenses/{id}"; // PUT /api/employee/expenses/{id}
+	public static final String DELETE_EXPENSE = "/expenses/{id}"; // DELETE /api/employee/expenses/{id} -(PENDING)
 	public static final String EXPENSES_MONTHLY_SUMMARY = "/expenses/monthly-summary"; // GET /api/employee/expenses/monthly-summary
-
-
+	
 	// Expenses - Manager
-	public static final String PENDING_EXPENSES_MANAGER = "/expenses/pending"; // GET /api/company/expenses/pending - Onay bekleyen harcamalar
-	public static final String APPROVED_EXPENSES_MANAGER = "/expenses/approved"; // GET /api/company/expenses/approved - Onaylanmış harcamalar
-	public static final String REJECTED_EXPENSES_MANAGER = "/expenses/rejected"; // GET /api/company/expenses/rejected - Reddedilmiş harcamalar
-	public static final String EXPENSES_LIST_MANAGER = "/expenses"; // GET /api/company/expenses - Personel harcamalarını listele
-	public static final String EXPENSE_DETAILS_MANAGER = "/expenses/{id}"; // GET /api/company/expenses/{id} - Harcama detayları
-	public static final String APPROVE_REJECT_EXPENSE = "/expenses/approve-reject"; // PUT /api/company//expenses/approve-reject - Harcama Kabul et yada Reddet
-	public static final String EXPENSES_USER_MONTHLY_SUMMARY = "/expenses/{userId}/monthly-summary";  // GET /api/company//expenses/{userId}/monthly-summary
+	public static final String PENDING_EXPENSES_MANAGER = "/expenses/pending"; // GET /api/company/expenses/pending
+	public static final String APPROVED_EXPENSES_MANAGER = "/expenses/approved"; // GET /api/company/expenses/approved
+	public static final String REJECTED_EXPENSES_MANAGER = "/expenses/rejected"; // GET /api/company/expenses/rejected
+	public static final String EXPENSES_LIST_MANAGER = "/expenses"; // GET /api/company/expenses
+	public static final String EXPENSE_DETAILS_MANAGER = "/expenses/{id}"; // GET /api/company/expenses/{id}
+	public static final String APPROVE_REJECT_EXPENSE = "/expenses/approve-reject"; // PUT /api/company/expenses/approve-reject
+	public static final String EXPENSES_USER_MONTHLY_SUMMARY = "/expenses/{userId}/monthly-summary";  // GET /api/company/expenses/{userId}/monthly-summary
 
 	// Embezzlement
-	public static final String EMBEZZLEMENT_LIST = COMPANY +"/embezzlement-list";  // GET /api/company/assets
-	public static final String EMBEZZLEMENT_DETAILS = COMPANY +"/embezzlement-details/{embezzlementId}";  // GET /api/company/assets
-	public static final String ASSIGNED_EMBEZZLEMENT_LIST = COMPANY +"/assigned-embezzlement-list";  // GET /api/company/assets
-	public static final String REJECTED_EMBEZZLEMENT_LIST = COMPANY +"/rejected-embezzlement-list";  // GET /api/company/assets
-	public static final String UNASSIGNED_EMBEZZLEMENT_LIST = COMPANY +"/unassigned-embezzlement-list";  // GET /api/company/assets
-
-	public static final String CREATE_EMBEZZLEMENT = COMPANY+"/create-embezzlement";  //POST /api/company/assets
-	public static final String ASSIGN_EMBEZZLEMENT = COMPANY+ "/employee/assign-embezzlement"; // manager atıyor -> personal kabul ediyor
-	// personal istekte bulunacak -> manager kabul edecek veya reddedecek
-	public static final String CONFIRM_REJECT = EMPLOYEE+"/confirm-reject";     // manager atıyor -> personal kabul ediyor
-	// personal talep edecek -> manager kabul edecek
-	public static final String MY_EMBEZZLEMENT_LIST =EMPLOYEE+"/my-embezzlement-list";
-	public static final String UPDATE_EMBEZZLEMENT = COMPANY+"/employee/update-embezzlement/{embezzlementId}";
-	public static final String DELETE_EMBEZZLEMENT = COMPANY+"/employee/delete-embezzlement";
-
+	public static final String EMBEZZLEMENT_LIST = COMPANY + "/embezzlement-list";  // GET /api/company/assets
+	public static final String EMBEZZLEMENT_DETAILS = COMPANY + "/embezzlement-details/{embezzlementId}";  // GET /api/company/assets
+	public static final String ASSIGNED_EMBEZZLEMENT_LIST = COMPANY + "/assigned-embezzlement-list";  // GET /api/company/assets
+	public static final String REJECTED_EMBEZZLEMENT_LIST = COMPANY + "/rejected-embezzlement-list";  // GET /api/company/assets
+	public static final String UNASSIGNED_EMBEZZLEMENT_LIST = COMPANY + "/unassigned-embezzlement-list";  // GET /api/company/assets
+	public static final String UPDATE_EMBEZZLEMENT = COMPANY + "/employee/update-embezzlement/{embezzlementId}";
+	public static final String DELETE_EMBEZZLEMENT = COMPANY + "/employee/delete-embezzlement";
+	public static final String CREATE_EMBEZZLEMENT = COMPANY + "/create-embezzlement";  //POST /api/company/assets
+	public static final String MY_EMBEZZLEMENT_LIST = EMPLOYEE + "/my-embezzlement-list";
+	
+	public static final String ASSIGN_EMBEZZLEMENT = COMPANY + "/employee/assign-embezzlement"; // manager send -> personal will approve/reject
+	public static final String CONFIRM_REJECT = EMPLOYEE + "/confirm-reject"; // personal will approve or reject
+	
+	public static final String REQUEST_EMBEZZLEMENT = EMPLOYEE + "/employee/request-embezzlement"; // personal request -> manager will approve/reject
+	public static final String MANAGER_CONFIRM_REJECT = COMPANY + "/manager-confirm-reject"; // manager will approve or reject
+	
 	// Comment
 	public static final String COMMENT = "/comment"; // POST /api/company/comment, PUT /api/company/comment
 	public static final String DELETE_COMMENT = "/comment/{id}"; // DELETE /api/company/comment/{id}
-
-	// Public Comments
 	public static final String PUBLIC_COMMENTS = "/comments"; // GET /api/public-api/comments
-
-	// Admin Comment Actions
 	public static final String ADMIN_COMMENT_APPROVE_OR_REJECT = "/comment/{id}/approve-or-reject"; // PUT /api/admin/comment/{id}/approve-or-reject
 	public static final String ADMIN_PENDING_COMMENTS = "/pending-comments"; // GET /api/admin/pending-comments
 	public static final String ADMIN_ALL_COMMENTS = "/all-comments"; // GET /api/admin/all-comments
@@ -140,7 +133,12 @@ public class EndPoints {
 	public static final String PERSONAL_SHIFT = COMPANY + "/employee/{userId}/personal-shift"; // GET /api/company/employee/{userId}/personal-shift
 	public static final String MY_SHIFT =  EMPLOYEE + "/my-shift"; // GET /api/employee/my-shift
 	public static final String ALL_ASSIGNED_SHIFTS = COMPANY + "/all-assigned-shifts"; // GET /api/company/all-assigned-shifts
-
-
+	
+	// Break (?)
+	public static final String ALL_BREAKS = COMPANY + "/all-breaks"; // GET /api/company/all-breaks
+	public static final String BREAK_DETAILS = COMPANY + "/{breakId}/break-details"; // GET /api/company/{breakId}/break-details
+	public static final String CREATE_BREAK = COMPANY + "/create-break"; // POST /api/company/create-break
+	public static final String UPDATE_BREAK = COMPANY + "/{breakId}/update-break"; // PUT /api/company/{breakId}/update-break
+	public static final String DELETE_BREAK = COMPANY + "/{breakId}/delete-break"; // DELETE /api/company/{breakId}/delete-break
 
  }

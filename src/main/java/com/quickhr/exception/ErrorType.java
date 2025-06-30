@@ -1,7 +1,7 @@
 package com.quickhr.exception;
 
 import lombok.*;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 
 @Getter
 @AllArgsConstructor
@@ -72,8 +72,7 @@ public enum ErrorType {
 	// EXPENSES
 	EXPENSE_NOT_FOUND(1001, "Harcama bulunamadı!", HttpStatus.NOT_FOUND),
 	INVALID_EXPENSE_OPERATION(1002, "Bu işlem yalnızca bekleyen harcamalar için yapılabilir.", HttpStatus.BAD_REQUEST),
-
-
+	
 	// COMMON
 	VALIDATION_EXCEPTION(500, "Bir veya birden fazla alan geçersiz! Lütfen giriş bilgilerinizi kontrol ederek tekrar deneyin!", HttpStatus.UNPROCESSABLE_ENTITY),
 	AUTHENTICATION_EXCEPTION(501, "Kimlik doğrulama başarısız oldu! Lütfen giriş bilgilerinizi kontrol edin!", HttpStatus.UNAUTHORIZED),
@@ -96,16 +95,21 @@ public enum ErrorType {
 
 	// EMBEZZLEMENT
 	EMBEZZLEMENT_NOT_FOUND(1, "Zimmet Kaydı Bulunamadı!", HttpStatus.NOT_FOUND),
-	EMBEZZLEMENT_ALREADY_ASSIGNED(2,"Zimmet zaten atanmış!", HttpStatus.BAD_REQUEST),
-	INVALID_STATE_CHANGE(3,"Geçersiz durum değişikliği!", HttpStatus.BAD_REQUEST),
-	NOTE_REQUIRED(4,"Not giriniz,ZORUNLU!", HttpStatus.BAD_REQUEST),
-	EMBEZZLEMENT_STATE_DOESNT_PENDING(5,"Ekipman pending de değil" ,HttpStatus.BAD_REQUEST ),
-	CANNOT_DELETE_APPROVED_EMBEZZLEMENT(6,"Onaylanmış silinemez.",HttpStatus.BAD_REQUEST ),
+	EMBEZZLEMENT_ALREADY_ASSIGNED(2, "Zimmet zaten atanmış!", HttpStatus.BAD_REQUEST),
+	INVALID_STATE_CHANGE(3, "Geçersiz durum değişikliği!", HttpStatus.BAD_REQUEST),
+	NOTE_REQUIRED(4, "Not giriniz, ZORUNLU!", HttpStatus.BAD_REQUEST),
+	EMBEZZLEMENT_STATE_DOESNT_PENDING(5, "Ekipman pending de değil" , HttpStatus.BAD_REQUEST ),
+	CANNOT_DELETE_APPROVED_EMBEZZLEMENT(6, "Onaylanmış silinemez.", HttpStatus.BAD_REQUEST ),
 	UNAUTHORIZED_NOT_MANAGER(7, "Bu işlemi yalnızca yöneticiler gerçekleştirebilir.", HttpStatus.FORBIDDEN),
 	UNAUTHORIZED_DIFFERENT_COMPANY(8, "Yönetici, çalışan ve zimmet aynı şirkete ait olmalıdır.", HttpStatus.FORBIDDEN),
 	UNAUTHORIZED_EMBEZZLEMENT_OWNER(9, "Sadece size ait zimmetleri onaylayabilir veya reddedebilirsiniz.", HttpStatus.FORBIDDEN),
-
-	// Shift
+	
+	// COMMENT
+	COMMENT_NOT_FOUND(2000, "Yorum bulunamadı", HttpStatus.NOT_FOUND),
+	COMMENT_ALREADY_EXITS(2001, "Şirkete ait zaten yorum bulunmaktadır. Birden fazla yorum eklenemez.", HttpStatus.CONFLICT),
+	INVALID_COMMENT_STATUS(2002, "Yorum gönderimde değil.", HttpStatus.BAD_REQUEST),
+	
+	// SHIFT
 	USER_DOESNT_ACTIVE(1001, "Kullanıcı aktif değildir!", HttpStatus.UNPROCESSABLE_ENTITY),
 	SHIFT_NOT_FOUND(1002, "Vardiya bulunamadı!", HttpStatus.NOT_FOUND),
 	SHIFT_NOT_ASSIGNED_TO_THIS_USER(1003, "Vardiyada kullanıcı mevcut değildir!", HttpStatus.CONFLICT),
@@ -118,17 +122,16 @@ public enum ErrorType {
 	SHIFT_CAPACITY_FULL(1010, "Kapasitesi doldu! Ya kapasitesini güncelle yada yeni bir vardiya açman gerekiyor!", HttpStatus.BAD_REQUEST),
 	INVALID_CAPACITY(1011, "Geçersiz kapasite değeri girildi!", HttpStatus.BAD_REQUEST),
 	USER_ALREADY_ASSIGNED_SHIFT(1012, "Kullanıcı zaten bu vardiyaya atanmış!", HttpStatus.CONFLICT),
-
-	// Comment
-	COMMENT_NOT_FOUND(2000, "Yorum bulunamadı" , HttpStatus.NOT_FOUND),
-	COMMENT_ALREADY_EXITS(2001 ,"Şirkete ait zaten yorum bulunmaktadır. Birden fazla yorum eklenemez.", HttpStatus.CONFLICT),
-	INVALID_COMMENT_STATUS(2002,"Yorum gönderimde değil.", HttpStatus.BAD_REQUEST )
-
-
-
-
-
-;
+	
+	// BREAK
+	BREAK_NOT_FOUND(2000, "Mola bulunamadı!", HttpStatus.NOT_FOUND),
+	BREAK_ALREADY_ASSIGNED_TO_USER(2001, "Bu kullanıcıya daha önce mola atanmış!", HttpStatus.CONFLICT),
+	
+	
+	
+	
+	// FINISH
+	FINISH(0, "THE END!", HttpStatus.OK);
 
 	int code;
 	String message;
