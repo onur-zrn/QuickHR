@@ -65,7 +65,7 @@ public class EndPoints {
 	public static final String USER_VERIFY_EMAIL = "/verify-email"; // PUT /api/users/change-email
 	public static final String USER_CHANGE_PASSWORD = "/change-password"; // PUT /api/users/change-password
 	public static final String USER_DEACTIVATE = "/deactivate"; // PUT /api/users/deactivate
-	// Employee -> usera geçince bu sattırı sil
+	// Employee 
 	public static final String EMPLOYEE_DASHBOARD = "/dashboard"; // api/employee/dashboard
 	public static final String UPDATE_PERSONAL_PROFILE = "/update"; // PUT api/company/update
 	
